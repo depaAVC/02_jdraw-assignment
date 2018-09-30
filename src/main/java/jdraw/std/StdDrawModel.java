@@ -19,23 +19,22 @@ import jdraw.framework.*;
  */
 public class StdDrawModel implements DrawModel {
 
-	private ArrayList<Figure> queue = new ArrayList<>();
+	private ArrayList<Figure> allFigures = new ArrayList<>();
     private LinkedList<DrawModelListener> observers = new LinkedList<>();
 
 	@Override
 	public void addFigure(Figure f) {
-        if( queue.contains( f ) ) return;
-        queue.add( f );
+        if( allFigures.contains(f) ) return;
+        allFigures.add( f );
         //notify observers
-        for( DrawModelListener obs : observers ){
+        for(DrawModelListener obs : observers){
             obs.modelChanged( new DrawModelEvent(this, f, DrawModelEvent.Type.FIGURE_ADDED) );
         }
 	}
 
 	@Override
 	public Iterable<Figure> getFigures() {
-
-        return queue;
+        return allFigures;
 	}
 
 	@Override
@@ -46,7 +45,7 @@ public class StdDrawModel implements DrawModel {
 
 	@Override
 	public void addModelChangeListener(DrawModelListener listener) {
-        observers.add( listener );
+        observers.add(listener);
 	}
 
 	@Override
