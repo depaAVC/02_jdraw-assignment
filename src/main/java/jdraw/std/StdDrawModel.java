@@ -5,33 +5,37 @@
 
 package jdraw.std;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
-import jdraw.framework.DrawCommandHandler;
-import jdraw.framework.DrawModel;
-import jdraw.framework.DrawModelListener;
-import jdraw.framework.Figure;
+import jdraw.framework.*;
 
 /**
  * Provide a standard behavior for the drawing model. This class initially does not implement the methods
  * in a proper way.
  * It is part of the course assignments to do so.
- * @author TODO add your name here
+ * @author Stefan Wohlgensinger
  *
  */
 public class StdDrawModel implements DrawModel {
 
+	private ArrayList<Figure> queue = new ArrayList<>();
+    private LinkedList<DrawModelListener> observers = new LinkedList<>();
+
 	@Override
 	public void addFigure(Figure f) {
-		// TODO to be implemented
-		System.out.println("StdDrawModel.addFigure has to be implemented");
+        if( queue.contains( f ) ) return;
+        queue.add( f );
+        //notify observers
+        for( DrawModelListener obs : observers ){
+            obs.modelChanged( new DrawModelEvent(this, f, DrawModelEvent.Type.FIGURE_ADDED) );
+        }
 	}
 
 	@Override
 	public Iterable<Figure> getFigures() {
-		// TODO to be implemented  
-		System.out.println("StdDrawModel.getFigures has to be implemented");
-		return new LinkedList<Figure>(); // Only guarantees, that the application starts -- has to be replaced !!!
+
+        return queue;
 	}
 
 	@Override
@@ -42,8 +46,7 @@ public class StdDrawModel implements DrawModel {
 
 	@Override
 	public void addModelChangeListener(DrawModelListener listener) {
-		// TODO to be implemented  
-		System.out.println("StdDrawModel.addModelChangeListener has to be implemented");
+        observers.add( listener );
 	}
 
 	@Override
