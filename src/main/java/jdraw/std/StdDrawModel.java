@@ -22,14 +22,23 @@ public class StdDrawModel implements DrawModel {
 	private ArrayList<Figure> allFigures = new ArrayList<>();
     private LinkedList<DrawModelListener> observers = new LinkedList<>();
 
+
+    private void notifyObservers(Figure f, DrawModelEvent.Type type) {
+        for(DrawModelListener obs : observers){
+            obs.modelChanged( new DrawModelEvent(this, f, type) );
+        }
+    }
+
 	@Override
 	public void addFigure(Figure f) {
         if( allFigures.contains(f) ) return;
         allFigures.add( f );
         //notify observers
-        for(DrawModelListener obs : observers){
-            obs.modelChanged( new DrawModelEvent(this, f, DrawModelEvent.Type.FIGURE_ADDED) );
-        }
+        notifyObservers(f, DrawModelEvent.Type.FIGURE_ADDED);
+        f.addFigureListener(e -> {
+            //TODO What to do here?
+            notifyObservers(f, DrawModelEvent.Type.FIGURE_CHANGED);
+        });
 	}
 
 	@Override
@@ -39,8 +48,10 @@ public class StdDrawModel implements DrawModel {
 
 	@Override
 	public void removeFigure(Figure f) {
-		// TODO to be implemented  
-		System.out.println("StdDrawModel.removeFigure has to be implemented");
+	    if( !allFigures.contains(f) ) return;
+        allFigures.remove(f);
+        notifyObservers(f, DrawModelEvent.Type.FIGURE_REMOVED);
+        f.removeFigureListener( e -> { /* TODO What to put in here? */} );
 	}
 
 	@Override
@@ -50,8 +61,7 @@ public class StdDrawModel implements DrawModel {
 
 	@Override
 	public void removeModelChangeListener(DrawModelListener listener) {
-		// TODO to be implemented  
-		System.out.println("StdDrawModel.removeModelChangeListener has to be implemented");
+		observers.remove(listener);
 	}
 
 	/** The draw command handler. Initialized here with a dummy implementation. */
@@ -75,8 +85,13 @@ public class StdDrawModel implements DrawModel {
 
 	@Override
 	public void removeAllFigures() {
-		// TODO to be implemented  
-		System.out.println("StdDrawModel.removeAllFigures has to be implemented");
+        for(Figure f : allFigures) {
+            notifyObservers(f, DrawModelEvent.Type.FIGURE_REMOVED);
+            //f.removeFigureListener(/* TODO Where to get the listener from? */);
+        }
+		allFigures.clear();
+        //observers.clear();
+		//Todo: remove listeners
 	}
 
 }

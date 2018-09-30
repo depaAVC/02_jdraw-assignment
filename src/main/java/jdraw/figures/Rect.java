@@ -101,7 +101,7 @@ public class Rect implements Figure {
 
 	@Override
 	public void removeFigureListener(FigureListener listener) {
-		// TODO Auto-generated method stub
+		observers.remove(listener);
 	}
 
 	@Override
