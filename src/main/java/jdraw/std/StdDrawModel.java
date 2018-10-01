@@ -17,13 +17,13 @@ import jdraw.framework.*;
  * @author Stefan Wohlgensinger
  *
  */
-public class StdDrawModel implements DrawModel {
+public class StdDrawModel implements DrawModel, FigureListener{
 
 	private ArrayList<Figure> allFigures = new ArrayList<>();
     private LinkedList<DrawModelListener> observers = new LinkedList<>();
 
 
-    private void notifyObservers(Figure f, DrawModelEvent.Type type) {
+    private void notifyModelObservers(Figure f, DrawModelEvent.Type type) {
         for(DrawModelListener obs : observers){
             obs.modelChanged( new DrawModelEvent(this, f, type) );
         }
@@ -34,11 +34,8 @@ public class StdDrawModel implements DrawModel {
         if( allFigures.contains(f) ) return;
         allFigures.add( f );
         //notify observers
-        notifyObservers(f, DrawModelEvent.Type.FIGURE_ADDED);
-        f.addFigureListener(e -> {
-            //TODO What to do here?
-            notifyObservers(f, DrawModelEvent.Type.FIGURE_CHANGED);
-        });
+        notifyModelObservers(f, DrawModelEvent.Type.FIGURE_ADDED);
+        f.addFigureListener(this);
 	}
 
 	@Override
@@ -50,8 +47,8 @@ public class StdDrawModel implements DrawModel {
 	public void removeFigure(Figure f) {
 	    if( !allFigures.contains(f) ) return;
         allFigures.remove(f);
-        notifyObservers(f, DrawModelEvent.Type.FIGURE_REMOVED);
-        f.removeFigureListener( e -> { /* TODO What to put in here? */} );
+        notifyModelObservers(f, DrawModelEvent.Type.FIGURE_REMOVED);
+        f.removeFigureListener( this );
 	}
 
 	@Override
@@ -86,12 +83,17 @@ public class StdDrawModel implements DrawModel {
 	@Override
 	public void removeAllFigures() {
         for(Figure f : allFigures) {
-            notifyObservers(f, DrawModelEvent.Type.FIGURE_REMOVED);
-            //f.removeFigureListener(/* TODO Where to get the listener from? */);
+//            notifyModelObservers(f, DrawModelEvent.Type.FIGURE_REMOVED);
+            notifyModelObservers(f, DrawModelEvent.Type.DRAWING_CLEARED);
+            f.removeFigureListener(this);
         }
 		allFigures.clear();
-        //observers.clear();
-		//Todo: remove listeners
-	}
+    }
 
+	// StdDrawModel is also a Listener (Observer) of Figures.
+    // Because it is between StdDrawView and Figure, it is a so called 'Mediator'.
+    @Override
+    public void figureChanged(FigureEvent e) {
+        notifyModelObservers(e.getFigure(), DrawModelEvent.Type.FIGURE_CHANGED);
+    }
 }

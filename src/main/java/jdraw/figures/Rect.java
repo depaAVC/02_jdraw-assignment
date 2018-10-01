@@ -12,7 +12,6 @@ import java.awt.Rectangle;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import jdraw.framework.Figure;
 import jdraw.framework.FigureEvent;
 import jdraw.framework.FigureHandle;
@@ -56,7 +55,7 @@ public class Rect implements Figure {
 		g.drawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 	}
 
-	private void notifyObservers() {
+	private void notifyFigureObservers() {
         for(FigureListener obs : observers) {
             obs.figureChanged( new FigureEvent(this));
         }
@@ -65,13 +64,13 @@ public class Rect implements Figure {
 	@Override
 	public void setBounds(Point origin, Point corner) {
 		rectangle.setFrameFromDiagonal(origin, corner);
-		notifyObservers();
+		notifyFigureObservers();
 	}
 
 	@Override
 	public void move(int dx, int dy) {
 		rectangle.setLocation(rectangle.x + dx, rectangle.y + dy);
-		notifyObservers();
+		notifyFigureObservers();
 	}
 
 	@Override
@@ -96,11 +95,13 @@ public class Rect implements Figure {
 
 	@Override
 	public void addFigureListener(FigureListener listener) {
-        observers.add(listener);
+        if (listener == null) return;
+	    observers.add(listener);
 	}
 
 	@Override
 	public void removeFigureListener(FigureListener listener) {
+        if (listener == null) return;
 		observers.remove(listener);
 	}
 
