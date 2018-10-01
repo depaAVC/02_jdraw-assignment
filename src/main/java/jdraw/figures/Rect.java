@@ -27,6 +27,8 @@ public class Rect implements Figure {
 
     private LinkedList<FigureListener> observers = new LinkedList<>();
 
+    private boolean notifying = false;
+
 	/**
 	 * Use the java.awt.Rectangle in order to save/reuse code.
 	 */
@@ -56,8 +58,12 @@ public class Rect implements Figure {
 	}
 
 	private void notifyFigureObservers() {
-        for(FigureListener obs : observers) {
-            obs.figureChanged( new FigureEvent(this));
+	    if (!notifying) {
+            notifying = true;   //prevents execution of inner block twice at the same time.
+            for(FigureListener obs : observers) {
+                obs.figureChanged( new FigureEvent(this));
+            }
+            notifying = false;
         }
     }
 	

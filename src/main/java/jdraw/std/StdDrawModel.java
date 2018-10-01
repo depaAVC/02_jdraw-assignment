@@ -83,9 +83,8 @@ public class StdDrawModel implements DrawModel, FigureListener{
 	@Override
 	public void removeAllFigures() {
         for(Figure f : allFigures) {
-//            notifyModelObservers(f, DrawModelEvent.Type.FIGURE_REMOVED);
             notifyModelObservers(f, DrawModelEvent.Type.DRAWING_CLEARED);
-            f.removeFigureListener(this);
+            f.removeFigureListener(this);       //wenn dieser Schritt weggelassen wird, was geschieht?
         }
 		allFigures.clear();
     }
