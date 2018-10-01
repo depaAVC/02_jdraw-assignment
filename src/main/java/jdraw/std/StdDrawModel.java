@@ -76,8 +76,32 @@ public class StdDrawModel implements DrawModel, FigureListener{
 
 	@Override
 	public void setFigureIndex(Figure f, int index) {
-		// TODO to be implemented  
-		System.out.println("StdDrawModel.setFigureIndex has to be implemented");
+        if (f == null) throw new NullPointerException();
+        if (!allFigures.contains(f)) throw new IllegalArgumentException();
+        if (index < 0 || index >= allFigures.size()) throw new IndexOutOfBoundsException();
+
+	    int currentIndex = allFigures.indexOf(f);
+	    if (currentIndex == index) return;
+	    //move
+        Figure currentFig;
+        int i;
+	    if (index < currentIndex) {
+	        i = currentIndex - 1;
+            while(i >= 0 && i >= index) {
+	            currentFig = allFigures.get(i);
+	            allFigures.set(i + 1, currentFig);
+	            --i;
+            }
+        } else {
+            i = currentIndex + 1;
+            while(i < allFigures.size() && i <= index) {
+                currentFig = allFigures.get(i);
+                allFigures.set(i - 1, currentFig);
+                ++i;
+            }
+        }
+        allFigures.set(index, f);
+	    notifyModelObservers(f, DrawModelEvent.Type.DRAWING_CHANGED);
 	}
 
 	@Override
