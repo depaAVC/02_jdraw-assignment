@@ -7,6 +7,8 @@ package jdraw.std;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import jdraw.framework.*;
 
@@ -20,7 +22,7 @@ import jdraw.framework.*;
 public class StdDrawModel implements DrawModel, FigureListener{
 
 	private ArrayList<Figure> allFigures = new ArrayList<>();
-    private LinkedList<DrawModelListener> observers = new LinkedList<>();
+    private List<DrawModelListener> observers = new CopyOnWriteArrayList<>();
 
 
     private void notifyModelObservers(Figure f, DrawModelEvent.Type type) {
