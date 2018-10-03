@@ -21,23 +21,25 @@ import jdraw.framework.*;
  */
 public class StdDrawModel implements DrawModel, FigureListener{
 
-	private ArrayList<Figure> allFigures = new ArrayList<>();
-    private List<DrawModelListener> observers = new CopyOnWriteArrayList<>();
+	private final ArrayList<Figure> allFigures = new ArrayList<>();
+    private final List<DrawModelListener> observers = new CopyOnWriteArrayList<>();
 
 
     private void notifyModelObservers(Figure f, DrawModelEvent.Type type) {
+		DrawModelEvent e = new DrawModelEvent(this, f, type);
         for(DrawModelListener obs : observers){
-            obs.modelChanged( new DrawModelEvent(this, f, type) );
+            obs.modelChanged( e );
         }
     }
 
 	@Override
 	public void addFigure(Figure f) {
-        if( allFigures.contains(f) ) return;
-        allFigures.add( f );
-        //notify observers
-        notifyModelObservers(f, DrawModelEvent.Type.FIGURE_ADDED);
-        f.addFigureListener(this);
+        if( !allFigures.contains(f) ) {
+			allFigures.add( f );
+			//notify observers
+			notifyModelObservers(f, DrawModelEvent.Type.FIGURE_ADDED);
+			f.addFigureListener(this);
+		}
 	}
 
 	@Override
@@ -47,19 +49,21 @@ public class StdDrawModel implements DrawModel, FigureListener{
 
 	@Override
 	public void removeFigure(Figure f) {
-	    if( !allFigures.contains(f) ) return;
-        allFigures.remove(f);
-        notifyModelObservers(f, DrawModelEvent.Type.FIGURE_REMOVED);
-        f.removeFigureListener( this );
+	    if( allFigures.remove(f) ) {
+			notifyModelObservers(f, DrawModelEvent.Type.FIGURE_REMOVED);
+			f.removeFigureListener( this );
+		}
 	}
 
 	@Override
 	public void addModelChangeListener(DrawModelListener listener) {
-        observers.add(listener);
+        if (listener == null) throw new NullPointerException();
+    	observers.add(listener);
 	}
 
 	@Override
 	public void removeModelChangeListener(DrawModelListener listener) {
+		if (listener == null) throw new NullPointerException();
 		observers.remove(listener);
 	}
 
@@ -84,32 +88,36 @@ public class StdDrawModel implements DrawModel, FigureListener{
 
 	    int currentIndex = allFigures.indexOf(f);
 	    if (currentIndex == index) return;
+	    /*
+	    //Komplizierte Lösung Marke eigenbau:
 	    //move
         Figure currentFig;
         int i;
 	    if (index < currentIndex) {
 	        i = currentIndex - 1;
-            while(i >= 0 && i >= index) {
+            while(i >= index) {		//Guard: i >= 0 &&
 	            currentFig = allFigures.get(i);
 	            allFigures.set(i + 1, currentFig);
 	            --i;
             }
         } else {
             i = currentIndex + 1;
-            while(i < allFigures.size() && i <= index) {
+            while(i <= index) {		//Guard: i < allFigures.size() &&
                 currentFig = allFigures.get(i);
                 allFigures.set(i - 1, currentFig);
                 ++i;
             }
-        }
-        allFigures.set(index, f);
+        }*/
+	    //einfachere Lösung - übernimmt entfernen und am richtigen Ort einfügen automatisch:
+	    allFigures.remove(f);
+	    allFigures.add(index, f);
 	    notifyModelObservers(f, DrawModelEvent.Type.DRAWING_CHANGED);
 	}
 
 	@Override
 	public void removeAllFigures() {
+		notifyModelObservers(null, DrawModelEvent.Type.DRAWING_CLEARED);
         for(Figure f : allFigures) {
-            notifyModelObservers(f, DrawModelEvent.Type.DRAWING_CLEARED);
             f.removeFigureListener(this);       //wenn dieser Schritt weggelassen wird, was geschieht?
         }
 		allFigures.clear();

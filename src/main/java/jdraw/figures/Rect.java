@@ -38,7 +38,7 @@ public class Rect implements Figure {
     *
     *   See: https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CopyOnWriteArrayList.html.
     */
-    private List<FigureListener> observers = new CopyOnWriteArrayList<>();
+    private final List<FigureListener> observers = new CopyOnWriteArrayList<>();
 
     // prevents notification cycles.
     private boolean notifying = false;
@@ -83,6 +83,7 @@ public class Rect implements Figure {
 	
 	@Override
 	public void setBounds(Point origin, Point corner) {
+		if(dx == 0 && dy == 0) return;
 		rectangle.setFrameFromDiagonal(origin, corner);
 		notifyFigureObservers();
 	}
@@ -116,13 +117,13 @@ public class Rect implements Figure {
 
 	@Override
 	public void addFigureListener(FigureListener listener) {
-        if (listener == null) return;
+        if (listener == null) throw new NullPointerException();
 	    observers.add(listener);
 	}
 
 	@Override
 	public void removeFigureListener(FigureListener listener) {
-        if (listener == null) return;
+        if (listener == null) throw new NullPointerException();
 		observers.remove(listener);
 	}
 
