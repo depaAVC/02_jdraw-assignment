@@ -83,7 +83,8 @@ public class Rect implements Figure {
 	
 	@Override
 	public void setBounds(Point origin, Point corner) {
-		if(dx == 0 && dy == 0) return;
+		if( Math.abs(origin.getX() - corner.getX()) == rectangle.getWidth() &&
+                Math.abs(origin.getY() - corner.getY()) == rectangle.getHeight()    ) return;
 		rectangle.setFrameFromDiagonal(origin, corner);
 		notifyFigureObservers();
 	}
