@@ -116,12 +116,12 @@ public class StdDrawModel implements DrawModel, FigureListener{
 
 	@Override
 	public void removeAllFigures() {
-		notifyModelObservers(null, DrawModelEvent.Type.DRAWING_CLEARED);
         for(Figure f : allFigures) {
             f.removeFigureListener(this);       //wenn dieser Schritt weggelassen wird, was geschieht?
         }
 		allFigures.clear();
-    }
+		notifyModelObservers(null, DrawModelEvent.Type.DRAWING_CLEARED);
+	}
 
 	// StdDrawModel is also a Listener (Observer) of Figures.
     // Because it is between StdDrawView and Figure, it is a so called 'Mediator'.

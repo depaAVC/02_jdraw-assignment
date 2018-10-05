@@ -5,8 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.awt.Graphics;
-import java.awt.Point;
+import java.awt.*;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,7 +28,7 @@ public class DrawModelTest {
 		@Override public void draw(Graphics g) {}
 		@Override public void move(int dx, int dy) {}
 		@Override public boolean contains(int x, int y) { return false;	}
-		@Override public java.awt.Rectangle getBounds() {return new java.awt.Rectangle();}
+		@Override public Rectangle getBounds() {return new java.awt.Rectangle();}
 		@Override public List<FigureHandle> getHandles() { return null; }
 		@Override public void addFigureListener(FigureListener listener) { }
 		@Override public void removeFigureListener(FigureListener listener) { }
