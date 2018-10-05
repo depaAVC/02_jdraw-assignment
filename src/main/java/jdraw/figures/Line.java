@@ -13,14 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * Created by degonas on 03.10.2018.
  */
-public class Line implements Figure {
-
-    private final List<FigureListener> observers = new CopyOnWriteArrayList<>(); //COWAL prevents ConcurrentModificationException when multiple observers are notified.
-
-    // Todo: find another solution to prevent notification cycles.
-    // prevents notification cycles.
-    private boolean notifying = false;
-
+public class Line extends AbstractObservableFigure {
 
     /**
      * Use the java.awt.geom.Line2D in order to save/reuse code.
@@ -52,17 +45,6 @@ public class Line implements Figure {
         //g.drawLine((int) line2D.getX1(), (int) line2D.getY1(), (int) line2D.getX2(), (int) line2D.getY2() );
     }
 
-    //Todo: refactor into abstract super class.
-    private void notifyFigureObservers() {
-        if (!notifying) {
-            notifying = true;   //prevents execution of inner block twice at the same time.
-            for(FigureListener obs : observers) {
-                obs.figureChanged( new FigureEvent(this));
-            }
-            notifying = false;
-        }
-    }
-
     @Override
     public void move(int dx, int dy) {
         if(dx == 0 && dy == 0) return;
@@ -90,32 +72,4 @@ public class Line implements Figure {
         return line2D.getBounds();
     }
 
-    /**
-     * Returns a list of 8 handles for this Line.
-     * @return all handles that are attached to the targeted figure.
-     * @see jdraw.framework.Figure#getHandles()
-     */
-    @Override
-    public List<FigureHandle> getHandles() {
-        return null;
-    }
-
-    //Todo: refactor into abstract super class.
-    @Override
-    public void addFigureListener(FigureListener listener) {
-        if (listener == null) throw new NullPointerException();
-        observers.add(listener);
-    }
-
-    //Todo: refactor into abstract super class.
-    @Override
-    public void removeFigureListener(FigureListener listener) {
-        if (listener == null) throw new NullPointerException();
-        observers.remove(listener);
-    }
-
-    @Override
-    public Figure clone() {
-        return null;
-    }
 }

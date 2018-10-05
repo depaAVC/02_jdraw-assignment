@@ -23,7 +23,7 @@ import jdraw.framework.FigureListener;
  * @author Christoph Denzler
  *
  */
-public class Rect implements Figure {
+public class Rect extends AbstractObservableFigure {
 
     //private LinkedList<FigureListener> observers = new LinkedList<>();    //led to ConcurrentModificationException in RectangleTest.testRemoveListener
     /*  CopyOnWriteArrayList - a multithread safe collection:
@@ -70,17 +70,6 @@ public class Rect implements Figure {
 		g.drawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 	}
 
-	//Todo: refactor into abstract super class.
-	private void notifyFigureObservers() {
-	    if (!notifying) {
-            notifying = true;   //prevents execution of inner block twice at the same time.
-            for(FigureListener obs : observers) {
-                obs.figureChanged( new FigureEvent(this));
-            }
-            notifying = false;
-        }
-    }
-	
 	@Override
 	public void setBounds(Point origin, Point corner) {
 		if( Math.abs(origin.getX() - corner.getX()) == rectangle.getWidth() &&
@@ -104,35 +93,6 @@ public class Rect implements Figure {
 	@Override
 	public Rectangle getBounds() {
 		return rectangle.getBounds();
-	}
-
-	/**
-	 * Returns a list of 8 handles for this Rectangle.
-	 * @return all handles that are attached to the targeted figure.
-	 * @see jdraw.framework.Figure#getHandles()
-	 */	
-	@Override
-	public List<FigureHandle> getHandles() {
-		return null;
-	}
-
-	//Todo: refactor into abstract super class.
-	@Override
-	public void addFigureListener(FigureListener listener) {
-        if (listener == null) throw new NullPointerException();
-	    observers.add(listener);
-	}
-
-    //Todo: refactor into abstract super class.
-	@Override
-	public void removeFigureListener(FigureListener listener) {
-        if (listener == null) throw new NullPointerException();
-		observers.remove(listener);
-	}
-
-	@Override
-	public Figure clone() {
-		return null;
 	}
 
 }
