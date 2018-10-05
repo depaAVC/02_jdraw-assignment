@@ -68,7 +68,7 @@ public class Line implements Figure {
         if(dx == 0 && dy == 0) return;
         line2D.setLine(new Line2D.Double(line2D.getX1() + dx, line2D.getY1() + dy,
                 line2D.getX2() + dx, line2D.getY2() + dy));
-        //notifyFigureObservers();
+        notifyFigureObservers();
     }
 
     @Override
@@ -77,7 +77,7 @@ public class Line implements Figure {
                 Math.abs(origin.getY() - corner.getY()) == rectangle.getHeight()    ) return;
                 */
         line2D.setLine(origin, corner);
-        //notifyFigureObservers();
+        notifyFigureObservers();
     }
 
     @Override
