@@ -1,17 +1,26 @@
 package jdraw.figures;
 
 import jdraw.framework.Figure;
+import jdraw.framework.FigureEvent;
 import jdraw.framework.FigureHandle;
 import jdraw.framework.FigureListener;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by degonas on 03.10.2018.
  */
 public class Line implements Figure {
+
+    private final List<FigureListener> observers = new CopyOnWriteArrayList<>(); //COWAL prevents ConcurrentModificationException when multiple observers are notified.
+
+    // Todo: find another solution to prevent notification cycles.
+    // prevents notification cycles.
+    private boolean notifying = false;
+
 
     /**
      * Use the java.awt.Rectangle in order to save/reuse code.
@@ -31,20 +40,35 @@ public class Line implements Figure {
         line2D = new Line2D.Double(x1, y1, x2, y2);
     }
 
+    /**
+     * Draw the rectangle to the given graphics context.
+     * @param g the graphics context to use for drawing.
+     */
     @Override
     public void draw(Graphics g) {
+        g.setColor(Color.WHITE);
+        g.drawLine((int) line2D.getX1(), (int) line2D.getY1(), (int) line2D.getX2(), (int) line2D.getY2() );
         g.setColor(Color.BLACK);
         g.drawLine((int) line2D.getX1(), (int) line2D.getY1(), (int) line2D.getX2(), (int) line2D.getY2() );
     }
 
-    @Override
-    public void move(int dx, int dy) {
-
+    //Todo: refactor into abstract super class.
+    private void notifyFigureObservers() {
+        if (!notifying) {
+            notifying = true;   //prevents execution of inner block twice at the same time.
+            for(FigureListener obs : observers) {
+                obs.figureChanged( new FigureEvent(this));
+            }
+            notifying = false;
+        }
     }
 
     @Override
-    public boolean contains(int x, int y) {
-        return false;
+    public void move(int dx, int dy) {
+        if(dx == 0 && dy == 0) return;
+        line2D.setLine(new Line2D.Double(line2D.getX1() + dx, line2D.getY1() + dy,
+                line2D.getX2() + dx, line2D.getY2() + dy));
+        //notifyFigureObservers();
     }
 
     @Override
@@ -57,23 +81,37 @@ public class Line implements Figure {
     }
 
     @Override
+    public boolean contains(int x, int y) {
+        return line2D.contains(x, y);
+    }
+
+    @Override
     public Rectangle getBounds() {
         return line2D.getBounds();
     }
 
+    /**
+     * Returns a list of 8 handles for this Rectangle.
+     * @return all handles that are attached to the targeted figure.
+     * @see jdraw.framework.Figure#getHandles()
+     */
     @Override
     public List<FigureHandle> getHandles() {
         return null;
     }
 
+    //Todo: refactor into abstract super class.
     @Override
     public void addFigureListener(FigureListener listener) {
-
+        if (listener == null) throw new NullPointerException();
+        observers.add(listener);
     }
 
+    //Todo: refactor into abstract super class.
     @Override
     public void removeFigureListener(FigureListener listener) {
-
+        if (listener == null) throw new NullPointerException();
+        observers.remove(listener);
     }
 
     @Override

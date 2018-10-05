@@ -9,7 +9,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.geom.Line2D;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -71,6 +70,7 @@ public class Rect implements Figure {
 		g.drawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 	}
 
+	//Todo: refactor into abstract super class.
 	private void notifyFigureObservers() {
 	    if (!notifying) {
             notifying = true;   //prevents execution of inner block twice at the same time.
@@ -116,12 +116,14 @@ public class Rect implements Figure {
 		return null;
 	}
 
+	//Todo: refactor into abstract super class.
 	@Override
 	public void addFigureListener(FigureListener listener) {
         if (listener == null) throw new NullPointerException();
 	    observers.add(listener);
 	}
 
+    //Todo: refactor into abstract super class.
 	@Override
 	public void removeFigureListener(FigureListener listener) {
         if (listener == null) throw new NullPointerException();

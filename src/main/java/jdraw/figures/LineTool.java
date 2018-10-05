@@ -7,7 +7,6 @@ import jdraw.framework.DrawView;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Line2D;
 
 /**
  * Created by degonas on 03.10.2018.
