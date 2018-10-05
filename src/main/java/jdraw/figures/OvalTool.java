@@ -20,23 +20,7 @@ import java.awt.event.MouseEvent;
  *
  * @author  Christoph Denzler
  */
-public class OvalTool implements DrawTool {
-
-	/**
-	 * the image resource path.
-	 */
-	private static final String IMAGES = "/images/";
-
-	/**
-	 * The context we use for drawing.
-	 */
-	private DrawContext context;
-
-	/**
-	 * The context's view. This variable can be used as a shortcut, i.e.
-	 * instead of calling context.getView().
-	 */
-	private DrawView view;
+public class OvalTool extends AbstractDrawTool {
 
 	/**
 	 * Temporary variable. During oval creation (during a
@@ -45,42 +29,18 @@ public class OvalTool implements DrawTool {
 	 */
 	private Oval newOval = null;
 
-	/**
-	 * Temporary variable.
-	 * During oval creation this variable refers to the point the
-	 * mouse was first pressed.
-	 */
-	private Point anchor = null;
 
 	/**
 	 * Create a new oval tool for the given context.
 	 * @param context a context to use this tool in.
 	 */
 	public OvalTool(DrawContext context) {
-		this.context = context;
-		this.view = context.getView();
+		super(context);
+		setName("Oval");
 	}
 
-	/**
-	 * Deactivates the current mode by resetting the cursor
-	 * and clearing the status bar.
-	 * @see DrawTool#deactivate()
-	 */
-	@Override
-	public void deactivate() {
-		this.context.showStatusText("");
-	}
 
-	/**
-	 * Activates the Oval Mode. There will be a
-	 * specific menu added to the menu bar that provides settings for
-	 * Oval attributes
-	 */
-	@Override
-	public void activate() {
-		this.context.showStatusText("Oval Mode");
-	}
-
+	// XXX Provisional solution: Eventually replace it by using Factory pattern.
 	/**
 	 * Initializes a new Oval object by setting an anchor
 	 * point where the mouse was pressed. A new Oval is then
@@ -93,63 +53,12 @@ public class OvalTool implements DrawTool {
 	 */
 	@Override
 	public void mouseDown(int x, int y, MouseEvent e) {
-		if (newOval != null) {
+		// XXX Provisional solution: Eventually replace it by using Factory pattern.
+		if (getNewFigure() != null) {
 			throw new IllegalStateException();
 		}
-		anchor = new Point(x, y);
-		newOval = new Oval(x, y, 0, 0);
-		view.getModel().addFigure(newOval);
+		setAnchor( new Point(x, y) );
+		setNewFigure( new Oval(x, y, 0, 0) );       //Type dependent constructor!
+		getView().getModel().addFigure(getNewFigure());
 	}
-
-	/**
-	 * During a mouse drag, the Oval will be resized according to the mouse
-	 * position. The status bar shows the current size.
-	 *
-	 * @param x   x-coordinate of mouse
-	 * @param y   y-coordinate of mouse
-	 * @param e   event containing additional information about which keys were
-	 *            pressed.
-	 *
-	 * @see DrawTool#mouseDrag(int, int, MouseEvent)
-	 */
-	@Override
-	public void mouseDrag(int x, int y, MouseEvent e) {
-		newOval.setBounds(anchor, new Point(x, y));
-		java.awt.Rectangle r = newOval.getBounds();
-		this.context.showStatusText("w: " + r.width + ", h: " + r.height);
-	}
-
-	/**
-	 * When the user releases the mouse, the Oval object is updated
-	 * according to the color and fill status settings.
-	 *
-	 * @param x   x-coordinate of mouse
-	 * @param y   y-coordinate of mouse
-	 * @param e   event containing additional information about which keys were
-	 *            pressed.
-	 *
-	 * @see DrawTool#mouseUp(int, int, MouseEvent)
-	 */
-	@Override
-	public void mouseUp(int x, int y, MouseEvent e) {
-		newOval = null;
-		anchor = null;
-		this.context.showStatusText("Oval Mode");
-	}
-
-	@Override
-	public Cursor getCursor() {
-		return Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
-	}
-	
-	@Override
-	public Icon getIcon() {
-		return new ImageIcon(getClass().getResource(IMAGES + "oval.png"));
-	}
-
-	@Override
-	public String getName() {
-		return "Oval";
-	}
-
 }

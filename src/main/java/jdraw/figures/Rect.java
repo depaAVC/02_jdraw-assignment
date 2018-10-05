@@ -25,23 +25,6 @@ import jdraw.framework.FigureListener;
  */
 public class Rect extends AbstractObservableFigure {
 
-    //private LinkedList<FigureListener> observers = new LinkedList<>();    //led to ConcurrentModificationException in RectangleTest.testRemoveListener
-    /*  CopyOnWriteArrayList - a multithread safe collection:
-    *   Prevents ConcurrentModificationException when a listener is removed while others are still
-    *   being notified. CopyOnWriteArrayList creates a duplicate of the ArrayList during mutative operations
-    *   such as add or set.
-    *
-    *   Why did this a problem occur?:
-    *   Iterators have a modification counter. If the collection they are iterating over
-    *   gets modified and thus leading the iterator to be outdated, they throw a ConcurrentModificationException.
-    *
-    *   See: https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/CopyOnWriteArrayList.html.
-    */
-    private final List<FigureListener> observers = new CopyOnWriteArrayList<>();
-
-    // prevents notification cycles.
-    private boolean notifying = false;
-
 	/**
 	 * Use the java.awt.Rectangle in order to save/reuse code.
 	 */
