@@ -23,14 +23,6 @@ import java.awt.event.MouseEvent;
 public class OvalTool extends AbstractDrawTool {
 
 	/**
-	 * Temporary variable. During oval creation (during a
-	 * mouse down - mouse drag - mouse up cycle) this variable refers
-	 * to the new oval that is inserted.
-	 */
-	private Oval newOval = null;
-
-
-	/**
 	 * Create a new oval tool for the given context.
 	 * @param context a context to use this tool in.
 	 */

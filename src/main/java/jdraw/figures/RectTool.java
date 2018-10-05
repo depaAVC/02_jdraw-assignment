@@ -24,13 +24,6 @@ import jdraw.framework.DrawView;
  * @author  Christoph Denzler
  */
 public class RectTool extends AbstractDrawTool {
-  
-	/**
-	 * Temporary variable. During rectangle creation (during a
-	 * mouse down - mouse drag - mouse up cycle) this variable refers
-	 * to the new rectangle that is inserted.
-	 */
-	private Rect newRect = null;
 
 
 	/**
