@@ -23,7 +23,7 @@ public class Line implements Figure {
 
 
     /**
-     * Use the java.awt.Rectangle in order to save/reuse code.
+     * Use the java.awt.geom.Line2D in order to save/reuse code.
      */
     private final Line2D line2D;
 
@@ -41,15 +41,15 @@ public class Line implements Figure {
     }
 
     /**
-     * Draw the rectangle to the given graphics context.
+     * Draw the line to the given graphics context.
      * @param g the graphics context to use for drawing.
      */
     @Override
     public void draw(Graphics g) {
-        g.setColor(Color.WHITE);
+        g.setColor(Color.BLUE);
         g.drawLine((int) line2D.getX1(), (int) line2D.getY1(), (int) line2D.getX2(), (int) line2D.getY2() );
-        g.setColor(Color.BLACK);
-        g.drawLine((int) line2D.getX1(), (int) line2D.getY1(), (int) line2D.getX2(), (int) line2D.getY2() );
+        //g.setColor(Color.BLACK);
+        //g.drawLine((int) line2D.getX1(), (int) line2D.getY1(), (int) line2D.getX2(), (int) line2D.getY2() );
     }
 
     //Todo: refactor into abstract super class.
@@ -91,7 +91,7 @@ public class Line implements Figure {
     }
 
     /**
-     * Returns a list of 8 handles for this Rectangle.
+     * Returns a list of 8 handles for this Line.
      * @return all handles that are attached to the targeted figure.
      * @see jdraw.framework.Figure#getHandles()
      */
