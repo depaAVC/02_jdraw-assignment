@@ -32,20 +32,14 @@ public abstract class AbstractObservableFigure implements Figure {
     // prevents notification cycles.
     private boolean notifying = false;
 
-    @Override
-    public abstract void draw(Graphics g);
+    /** Methoden, die vom Interface geerbt werden, müssen nicht mehr als abstract aufgelistet werden.
+     * draw(), move(), contains(), setBounds(), getBounds().
+     * e.g.
+     *      public abstract void draw(Graphics g);
+     *
+     *      ...ist überflüssig.
+     * */
 
-    @Override
-    public abstract void move(int dx, int dy);
-
-    @Override
-    public abstract boolean contains(int x, int y);
-
-    @Override
-    public abstract void setBounds(Point origin, Point corner);
-
-    @Override
-    public abstract Rectangle getBounds();
 
     /**
      * Returns a list of 8 handles for this Rectangle.
@@ -58,22 +52,24 @@ public abstract class AbstractObservableFigure implements Figure {
     }
 
     @Override
-    public void addFigureListener(FigureListener listener) {
+    public final void addFigureListener(FigureListener listener) {
         if (listener == null) throw new NullPointerException();
         observers.add(listener);
     }
 
     @Override
-    public void removeFigureListener(FigureListener listener) {
+    public final void removeFigureListener(FigureListener listener) {
         if (listener == null) throw new NullPointerException();
         observers.remove(listener);
     }
 
-    void notifyFigureObservers() {
+    //protected = package-private + access from subclasses.
+    protected void notifyFigureObservers() {
         if (!notifying) {
             notifying = true;   //prevents execution of inner block twice at the same time.
+            FigureEvent e = new FigureEvent(this);
             for(FigureListener obs : observers) {
-                obs.figureChanged( new FigureEvent(this));
+                obs.figureChanged( e );
             }
             notifying = false;
         }

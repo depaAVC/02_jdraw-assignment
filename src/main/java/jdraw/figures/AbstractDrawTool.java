@@ -3,6 +3,7 @@ package jdraw.figures;
 import jdraw.framework.DrawContext;
 import jdraw.framework.DrawTool;
 import jdraw.framework.DrawView;
+import jdraw.framework.Figure;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +15,7 @@ import java.awt.event.MouseEvent;
 public abstract class AbstractDrawTool implements DrawTool {
 
 
-    private String name = "";
+    private final String name;
 
     /**
      * the image resource path.
@@ -24,20 +25,20 @@ public abstract class AbstractDrawTool implements DrawTool {
     /**
      * The context we use for drawing.
      */
-    private DrawContext context;
+    private final DrawContext context;
 
     /**
      * The context's view. This variable can be used as a shortcut, i.e.
      * instead of calling context.getView().
      */
-    private DrawView view;
+    private final DrawView view;
 
     /**
      * Temporary variable. During rectangle creation (during a
      * mouse down - mouse drag - mouse up cycle) this variable refers
      * to the new rectangle that is inserted.
      */
-    private AbstractObservableFigure newFigure = null;
+    private Figure newFigure = null;
 
     /**
      * Temporary variable.
@@ -47,8 +48,13 @@ public abstract class AbstractDrawTool implements DrawTool {
     private Point anchor = null;
 
     public AbstractDrawTool(DrawContext context) {
+        this(context, "");
+    }
+
+    public AbstractDrawTool(DrawContext context, String name) {
         this.context = context;
         this.view = context.getView();
+        this.name = name;
     }
 
     /**
@@ -82,7 +88,15 @@ public abstract class AbstractDrawTool implements DrawTool {
      * @see DrawTool#mouseDown(int, int, MouseEvent)
      */
     @Override
-    public abstract void mouseDown(int x, int y, MouseEvent e);
+    public void mouseDown(int x, int y, MouseEvent e) {
+        // XXX Provisional solution: Eventually replace it by using Factory pattern.
+        if (newFigure != null) {
+            throw new IllegalStateException();
+        }
+        anchor = new Point(x, y);
+        newFigure = getNewFigure(x, y);
+        view.getModel().addFigure(newFigure);
+    }
 
     /**
      * During a mouse drag, the Oval will be resized according to the mouse
@@ -122,38 +136,22 @@ public abstract class AbstractDrawTool implements DrawTool {
 
 
     @Override
-    public Cursor getCursor() {
+    public final Cursor getCursor() {
         return Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR);
     }
 
     @Override
-    public Icon getIcon() {
+    public final Icon getIcon() {
         return new ImageIcon(getClass().getResource(IMAGES + name.toLowerCase() + ".png"));
     }
 
     @Override
-    public String getName() {
+    public final String getName() {
         return name;
     }
 
-    void setName(String n) {
-        this.name = n;
-    }
+    // a factory method, using inheritance instead of switch statement in the abstract class.
+    public abstract Figure getNewFigure(int x, int y);
 
-    // XXX Provisional solution: Eventually replace it by using Factory pattern.
-    public DrawView getView() {
-        return view;
-    }
 
-    public AbstractObservableFigure getNewFigure() {
-        return newFigure;
-    }
-
-    public void setNewFigure(AbstractObservableFigure newFigure) {
-        this.newFigure = newFigure;
-    }
-
-    public void setAnchor(Point anchor) {
-        this.anchor = anchor;
-    }
 }

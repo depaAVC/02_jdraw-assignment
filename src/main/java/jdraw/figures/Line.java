@@ -7,6 +7,7 @@ import jdraw.framework.FigureListener;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -41,8 +42,6 @@ public class Line extends AbstractObservableFigure {
     public void draw(Graphics g) {
         g.setColor(Color.BLUE);
         g.drawLine((int) line2D.getX1(), (int) line2D.getY1(), (int) line2D.getX2(), (int) line2D.getY2() );
-        //g.setColor(Color.BLACK);
-        //g.drawLine((int) line2D.getX1(), (int) line2D.getY1(), (int) line2D.getX2(), (int) line2D.getY2() );
     }
 
     @Override
@@ -55,16 +54,17 @@ public class Line extends AbstractObservableFigure {
 
     @Override
     public void setBounds(Point origin, Point corner) {
-        /*if( Math.abs(origin.getX() - corner.getX()) == rectangle.getWidth() &&
-                Math.abs(origin.getY() - corner.getY()) == rectangle.getHeight()    ) return;
-                */
+        if( origin.getX() == line2D.getP1().getX() && origin.getY() == line2D.getP1().getY() &&
+                corner.getX() == line2D.getP2().getX() && corner.getY() == line2D.getP2().getY()    ) {
+            return;
+        }
         line2D.setLine(origin, corner);
         notifyFigureObservers();
     }
 
     @Override
     public boolean contains(int x, int y) {
-        return line2D.contains(x, y);
+        return line2D.ptSegDist(new Point2D.Double(x, y)) < 25;
     }
 
     @Override
