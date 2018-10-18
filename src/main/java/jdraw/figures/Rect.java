@@ -9,9 +9,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import jdraw.figures.handles.NorthEastHandle;
+import jdraw.figures.handles.NorthWestHandle;
 import jdraw.framework.Figure;
 import jdraw.framework.FigureEvent;
 import jdraw.framework.FigureHandle;
@@ -78,4 +81,11 @@ public class Rect extends AbstractObservableFigure {
 		return rectangle.getBounds();
 	}
 
+	@Override
+	public List<FigureHandle> getHandles() {
+		List<FigureHandle> handles = new LinkedList<>();
+		handles.add(new NorthWestHandle(this));
+		handles.add(new NorthEastHandle(this));
+		return handles;
+	}
 }
