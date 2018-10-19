@@ -29,6 +29,11 @@ public abstract class AbstractFigureHandle implements FigureHandle {
         this.cursor = cursor;
     }
 
+    protected AbstractFigureHandle(Figure owner, int cursor, Point corner) {
+        this(owner, cursor);
+        this.corner = corner;
+    }
+
     /**
      * Gets the handle's owner.
      *
@@ -112,6 +117,7 @@ public abstract class AbstractFigureHandle implements FigureHandle {
      */
     @Override
     public final void dragInteraction(int x, int y, MouseEvent e, DrawView v) {
+        System.out.println(x + " " + y + " " + corner.getX() + " " + corner.getY());
         handleDragInteraction (x, y, owner, corner);
     }
 
@@ -130,5 +136,9 @@ public abstract class AbstractFigureHandle implements FigureHandle {
     @Override
     public final void stopInteraction(int x, int y, MouseEvent e, DrawView v) {
         corner = null;
+    }
+
+    public final Point getCorner() {
+        return corner;
     }
 }

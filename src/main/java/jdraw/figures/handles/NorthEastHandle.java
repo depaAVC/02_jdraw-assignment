@@ -13,6 +13,10 @@ public class NorthEastHandle extends AbstractDiagonalHandle {
         super(owner, Cursor.NE_RESIZE_CURSOR);
     }
 
+    public NorthEastHandle(Figure owner, Point corner) {
+        super(owner, Cursor.NE_RESIZE_CURSOR, corner);
+    }
+
     /**
      * Returns the location of this handle. The result depends on the location
      * of the owning figure.

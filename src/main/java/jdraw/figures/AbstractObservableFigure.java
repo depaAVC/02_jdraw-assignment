@@ -51,7 +51,7 @@ public abstract class AbstractObservableFigure implements Figure {
     public List<FigureHandle> getHandles() {
         List<FigureHandle> handles = new LinkedList<>();
         handles.add(new NorthWestHandle(this));
-        handles.add(new NorthEastHandle(this));
+       // handles.add(new NorthEastHandle(this));
         handles.add(new SouthEastHandle(this));
         handles.add(new SouthWestHandle(this));
         handles.add(new NorthHandle(this));

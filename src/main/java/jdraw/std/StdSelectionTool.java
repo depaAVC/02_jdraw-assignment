@@ -16,6 +16,7 @@ import java.util.Set;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
+import jdraw.figures.handles.NorthEastHandle;
 import jdraw.framework.DrawContext;
 import jdraw.framework.DrawTool;
 import jdraw.framework.DrawView;
@@ -214,6 +215,16 @@ public class StdSelectionTool implements DrawTool {
 	public void mouseDrag(int i, int j, java.awt.event.MouseEvent e) {
 		if (currentHandle != null) {
 			currentHandle.dragInteraction(i, j, e, view);
+			// TODO: Statewechsel für wenn Handle über corner hinweg gezogen wird.
+			// Frage: Wie am geschicktesten Lösen?
+			// Varianten:
+			// 1) Hier mit if - statements prüfen, ob i und j kleiner oder grösser sind als corner.x und corner.y.
+			// 2) dragInteraction den Rückgabetyp 'FigureHandle" geben und diese Methode entscheiden lassen, welcher Zustand nun gilt.
+			// 2b)dragInteraction den Rückgabetyp 'FigureHandle" geben, aber die Entscheidung des Zustandswechsel in handleDragInteraction() fällen.
+			if (i > currentHandle.getCorner().x) {
+				currentHandle = new NorthEastHandle(currentHandle.getOwner(), currentHandle.getCorner());
+				currentHandle.startInteraction(i, j, e, view);
+			}
 			return;
 		}
 

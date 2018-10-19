@@ -14,8 +14,13 @@ public abstract class AbstractDiagonalHandle extends AbstractFigureHandle {
         super(owner, cursor);
     }
 
+    protected AbstractDiagonalHandle(Figure owner, int cursor, Point corner) {
+        super(owner, cursor, corner);
+    }
+
     @Override
     protected void handleDragInteraction (int x, int y, Figure owner, Point corner) {
         owner.setBounds(new Point(x, y), corner);
     }
+
 }
