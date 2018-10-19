@@ -7,10 +7,10 @@ import java.awt.*;
 /**
  * Created by degonas on 18.10.2018.
  */
-public class NorthEastHandle extends AbstractDiagonalHandle {
+public class EastHandle extends AbstractFigureHandle {
 
-    public NorthEastHandle(Figure owner) {
-        super(owner, Cursor.NE_RESIZE_CURSOR);
+    public EastHandle(Figure owner) {
+        super(owner, Cursor.E_RESIZE_CURSOR);
     }
 
     /**
@@ -22,11 +22,17 @@ public class NorthEastHandle extends AbstractDiagonalHandle {
     @Override
     public Point getLocation() {
         Point loc = getOwner().getBounds().getLocation();
-        return new Point( (int) (loc.x + getOwner().getBounds().getWidth()), loc.y );
+        return new Point( (int) (loc.x + getOwner().getBounds().getWidth()), (int) (loc.y + (getOwner().getBounds().getHeight() / 2)));
     }
 
     @Override
     public Point getOppositeCorner(int x, int y, Rectangle r) {
         return new Point(r.x, r.y + r.height);
+    }
+
+    @Override
+    protected void handleDragInteraction (int x, int y, Figure owner, Point corner) {
+        Point loc = owner.getBounds().getLocation();
+        owner.setBounds(new Point(x, loc.y), corner);
     }
 }

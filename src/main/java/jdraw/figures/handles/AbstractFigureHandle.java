@@ -7,7 +7,9 @@ import jdraw.framework.FigureHandle;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
-/**
+/** Base class of the state pattern.
+ *  In 02_State_Script_D.pdf the "State" class, shown in the diagram.
+ *
  * Created by degonas on 18.10.2018.
  */
 public abstract class AbstractFigureHandle implements FigureHandle {
@@ -91,12 +93,13 @@ public abstract class AbstractFigureHandle implements FigureHandle {
      * @param v the view in which the interaction is performed
      */
     @Override
-    public void startInteraction(int x, int y, MouseEvent e, DrawView v) {
+    public final void startInteraction(int x, int y, MouseEvent e, DrawView v) {
         Rectangle r = owner.getBounds();
         corner = getOppositeCorner(x, y, r);
     }
 
     //returns the position of the opposite handle.
+    // Frage: Ist dies eine Factory - Methode oder geht dies in Richtung state pattern?
     protected abstract Point getOppositeCorner(int x, int y, Rectangle r);
 
     /**
@@ -108,10 +111,13 @@ public abstract class AbstractFigureHandle implements FigureHandle {
      * @param v the view in which the interaction is performed
      */
     @Override
-    public void dragInteraction(int x, int y, MouseEvent e, DrawView v) {
-        owner.setBounds(new Point(x, y), corner);
+    public final void dragInteraction(int x, int y, MouseEvent e, DrawView v) {
+        handleDragInteraction (x, y, owner, corner);
     }
 
+    // enforces distinction between diagonal handles and vertical/horizontal ones.
+    // This is required due to the implementation of Rec.setBounds (checkout setFrameFromDiagonal).
+    protected abstract void handleDragInteraction (int x, int y, Figure owner, Point corner);
 
     /**
      * Tracks the end of a running interaction.
@@ -122,7 +128,7 @@ public abstract class AbstractFigureHandle implements FigureHandle {
      * @param v the view in which the interaction is performed
      */
     @Override
-    public void stopInteraction(int x, int y, MouseEvent e, DrawView v) {
+    public final void stopInteraction(int x, int y, MouseEvent e, DrawView v) {
         corner = null;
     }
 }

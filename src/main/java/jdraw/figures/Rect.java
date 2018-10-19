@@ -13,8 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import jdraw.figures.handles.NorthEastHandle;
-import jdraw.figures.handles.NorthWestHandle;
+import jdraw.figures.handles.*;
 import jdraw.framework.Figure;
 import jdraw.framework.FigureEvent;
 import jdraw.framework.FigureHandle;
@@ -86,6 +85,12 @@ public class Rect extends AbstractObservableFigure {
 		List<FigureHandle> handles = new LinkedList<>();
 		handles.add(new NorthWestHandle(this));
 		handles.add(new NorthEastHandle(this));
+		handles.add(new SouthEastHandle(this));
+		handles.add(new SouthWestHandle(this));
+		handles.add(new NorthHandle(this));
+		handles.add(new SouthHandle(this));
+		handles.add(new EastHandle(this));
+		handles.add(new WestHandle(this));
 		return handles;
 	}
 }

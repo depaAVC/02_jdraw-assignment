@@ -4,10 +4,10 @@ import jdraw.framework.Figure;
 
 import java.awt.*;
 
-/**
+/** A concrete state - class. handleLocation() == getLocation() for example.
  * Created by degonas on 18.10.2018.
  */
-public class NorthWestHandle extends AbstractFigureHandle {
+public class NorthWestHandle extends AbstractDiagonalHandle {
 
 
     public NorthWestHandle(Figure owner) {
