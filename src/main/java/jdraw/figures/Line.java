@@ -1,15 +1,8 @@
 package jdraw.figures;
 
-import jdraw.framework.Figure;
-import jdraw.framework.FigureEvent;
-import jdraw.framework.FigureHandle;
-import jdraw.framework.FigureListener;
-
 import java.awt.*;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by degonas on 03.10.2018.

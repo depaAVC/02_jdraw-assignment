@@ -1,5 +1,6 @@
 package jdraw.figures;
 
+import jdraw.figures.handles.*;
 import jdraw.framework.Figure;
 import jdraw.framework.FigureEvent;
 import jdraw.framework.FigureHandle;
@@ -48,7 +49,16 @@ public abstract class AbstractObservableFigure implements Figure {
      */
     @Override
     public List<FigureHandle> getHandles() {
-        return null;
+        List<FigureHandle> handles = new LinkedList<>();
+        handles.add(new NorthWestHandle(this));
+        handles.add(new NorthEastHandle(this));
+        handles.add(new SouthEastHandle(this));
+        handles.add(new SouthWestHandle(this));
+        handles.add(new NorthHandle(this));
+        handles.add(new SouthHandle(this));
+        handles.add(new EastHandle(this));
+        handles.add(new WestHandle(this));
+        return handles;
     }
 
     @Override
