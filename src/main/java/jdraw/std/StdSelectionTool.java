@@ -221,10 +221,10 @@ public class StdSelectionTool implements DrawTool {
 			// 1) Hier mit if - statements prüfen, ob i und j kleiner oder grösser sind als corner.x und corner.y.
 			// 2) dragInteraction den Rückgabetyp 'FigureHandle" geben und diese Methode entscheiden lassen, welcher Zustand nun gilt.
 			// 2b)dragInteraction den Rückgabetyp 'FigureHandle" geben, aber die Entscheidung des Zustandswechsel in handleDragInteraction() fällen.
-			if (i > currentHandle.getCorner().x) {
+			/*if (i > currentHandle.getCorner().x) {
 				currentHandle = new NorthEastHandle(currentHandle.getOwner(), currentHandle.getCorner());
 				currentHandle.startInteraction(i, j, e, view);
-			}
+			}*/
 			return;
 		}
 
