@@ -14,45 +14,88 @@ public class Handle implements FigureHandle {
 
     static interface State {
         //default State handleGetOwner() {}
-        default State handleLocation(HandleData data, Figure owner) {return ERROR; }
-        default State handleCursor(HandleData data) {return ERROR; }
-        default State handleOppositeCorner(HandleData data, int x, int y, Rectangle r) {return ERROR; }
+        default void handleLocation(HandleData data, Figure owner) {}
+        default void handleCursor(HandleData data) {}
+        default void handleOppositeCorner(HandleData data, int x, int y, Rectangle r) {}
         default State handleDragInteraction(HandleData data, Figure owner, int x, int y) {return ERROR; }
     }
 
-    static class NW implements State {
-        @Override
-        public State handleLocation(HandleData data, Figure owner) {
-            data.location = owner.getBounds().getLocation();
-            return this;
-        }
-
-        @Override
-        public State handleOppositeCorner(HandleData data, int x, int y, Rectangle r) {
-            data.corner = new Point(r.x + r.width, r.y + r.height);
-            return this;
-        }
-
-        @Override
-        public State handleCursor(HandleData data) { data.cursor = Cursor.NW_RESIZE_CURSOR; return this; }
-
+    static abstract class AbstractDiagonalState implements State {
         @Override
         public State handleDragInteraction(HandleData data, Figure owner, int x, int y) {
             owner.setBounds(new Point(x, y), data.corner);
-            return this;
+            if (x < data.corner.x && y < data.corner.y) return NW;
+            if (x < data.corner.x && y > data.corner.y) return SW;
+            if (x > data.corner.x && y < data.corner.y) return NE;
+            //if (x > data.corner.x && y > data.corner.y) return SE;
+            else return SE;
         }
     }
 
-    static class NE implements State {
+    static class NW extends AbstractDiagonalState {
+        @Override
+        public void handleLocation(HandleData data, Figure owner) {
+            data.location = owner.getBounds().getLocation();
+        }
+
+        @Override
+        public void handleOppositeCorner(HandleData data, int x, int y, Rectangle r) {
+            data.corner = new Point(r.x + r.width, r.y + r.height);
+        }
+
+        @Override
+        public void handleCursor(HandleData data) { data.cursor = Cursor.NW_RESIZE_CURSOR; }
 
     }
 
-    static class SW implements State {
+    static class NE extends AbstractDiagonalState {
+        @Override
+        public void handleLocation(HandleData data, Figure owner) {
+            Point loc = owner.getBounds().getLocation();
+            data.location = new Point( (int) (loc.x + owner.getBounds().getWidth()), loc.y );
+        }
+
+        @Override
+        public void handleOppositeCorner(HandleData data, int x, int y, Rectangle r) {
+            data.corner = new Point(r.x, r.y + r.height);
+        }
+
+        @Override
+        public void handleCursor(HandleData data) { data.cursor = Cursor.NE_RESIZE_CURSOR; }
 
     }
 
-    static class SE implements State {
+    static class SW extends AbstractDiagonalState {
+        @Override
+        public void handleLocation(HandleData data, Figure owner) {
+            Point loc = owner.getBounds().getLocation();
+            data.location =  new Point( loc.x , (int) (loc.y + owner.getBounds().getHeight()) );
+        }
 
+        @Override
+        public void handleOppositeCorner(HandleData data, int x, int y, Rectangle r) {
+            data.corner = new Point(r.x + r.width, r.y);
+        }
+
+        @Override
+        public void handleCursor(HandleData data) { data.cursor = Cursor.SW_RESIZE_CURSOR; }
+    }
+
+    static class SE extends AbstractDiagonalState {
+        @Override
+        public void handleLocation(HandleData data, Figure owner) {
+            Point loc = owner.getBounds().getLocation();
+            data.location =  new Point( (int) (loc.x + owner.getBounds().getWidth()),
+                    (int) (loc.y + owner.getBounds().getHeight()) );
+        }
+
+        @Override
+        public void handleOppositeCorner(HandleData data, int x, int y, Rectangle r) {
+            data.corner = new Point(r.x, r.y);
+        }
+
+        @Override
+        public void handleCursor(HandleData data) { data.cursor = Cursor.SE_RESIZE_CURSOR; }
     }
 
     static class N implements State {
@@ -107,6 +150,13 @@ public class Handle implements FigureHandle {
         state = initialState;
     }
 
+    //for testing purposes.
+    private Color fill = Color.WHITE;
+    public Handle(Figure owner, State initialState, Color fill) {
+        this(owner, initialState);
+        this.fill = fill;
+    }
+
     @Override
     public Figure getOwner() {
         return owner;
@@ -114,7 +164,7 @@ public class Handle implements FigureHandle {
 
     @Override
     public Point getLocation() {
-        state = state.handleLocation(data, owner);
+        state.handleLocation(data, owner);
         return data.location;
     }
 
@@ -122,13 +172,13 @@ public class Handle implements FigureHandle {
     public void draw(Graphics g) {
         Point loc = getLocation();
         int delta = size / 2;
-        g.setColor(Color.WHITE); g.fillRect(loc.x - delta, loc.y - delta, size, size);
+        g.setColor(fill); g.fillRect(loc.x - delta, loc.y - delta, size, size);
         g.setColor(Color.BLACK); g.drawRect(loc.x - delta, loc.y - delta, size, size);
     }
 
     @Override
     public Cursor getCursor() {
-        state = state.handleCursor(data);
+        state.handleCursor(data);
         return Cursor.getPredefinedCursor(data.cursor);
     }
 
@@ -142,13 +192,13 @@ public class Handle implements FigureHandle {
     @Override
     public void startInteraction(int x, int y, MouseEvent e, DrawView v) {
         Rectangle r = owner.getBounds();
-        state = state.handleOppositeCorner(data, x, y, r);
+        state.handleOppositeCorner(data, x, y, r);
         //data.corner = getOppositeCorner(x, y, r);
     }
 
     @Override
     public void dragInteraction(int x, int y, MouseEvent e, DrawView v) {
-        state = state.handleDragInteraction(data,owner, x ,y);
+        state = state.handleDragInteraction(data, owner, x ,y);
     }
 
     @Override

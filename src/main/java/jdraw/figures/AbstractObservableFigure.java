@@ -51,18 +51,26 @@ public abstract class AbstractObservableFigure implements Figure {
     @Override
     public List<FigureHandle> getHandles() {
         List<FigureHandle> handles = new LinkedList<>();
-       /* handles.add(new NorthWestHandle(this));
-       // handles.add(new NorthEastHandle(this));
+        //addHandlesOfInheritanceApproach(handles);
+
+        handles.add(new Handle(this, Handle.NW, Color.BLUE));
+        handles.add(new Handle(this, Handle.SW, Color.ORANGE));
+        handles.add(new Handle(this, Handle.NE, Color.RED));
+        handles.add(new Handle(this, Handle.SE));
+
+        return handles;
+    }
+
+
+    private void addHandlesOfInheritanceApproach(List<FigureHandle> handles) {
+        handles.add(new NorthWestHandle(this));
+        handles.add(new NorthEastHandle(this));
         handles.add(new SouthEastHandle(this));
         handles.add(new SouthWestHandle(this));
         handles.add(new NorthHandle(this));
         handles.add(new SouthHandle(this));
         handles.add(new EastHandle(this));
-        handles.add(new WestHandle(this));*/
-
-        handles.add(new Handle(this, Handle.NW));
-
-        return handles;
+        handles.add(new WestHandle(this));
     }
 
     @Override
