@@ -24,6 +24,9 @@ import jdraw.framework.DrawTool;
 import jdraw.framework.DrawToolFactory;
 import jdraw.framework.DrawView;
 import jdraw.framework.Figure;
+import jdraw.grid.Grid20Px;
+import jdraw.grid.Grid50Px;
+import jdraw.grid.SimpleGrid;
 
 /**
  * Standard implementation of interface DrawContext.
@@ -136,6 +139,18 @@ public class StdContext extends AbstractContext {
 		grid.add("Grid 2");
 		grid.add("Grid 3");
 		editMenu.add(grid);
+		JMenuItem simpleGrid = new JMenuItem("Simple Grid");
+		simpleGrid.addActionListener(e -> getView().setGrid(new SimpleGrid()));
+		JMenuItem grid20Px = new JMenuItem("Grid 20 Px");
+		simpleGrid.addActionListener(e -> getView().setGrid(new Grid20Px()));
+		JMenuItem grid50Px = new JMenuItem("Grid 50 Px");
+		simpleGrid.addActionListener(e -> getView().setGrid(new Grid50Px()));
+		JMenuItem resetGrid = new JMenuItem("Reset Grid");
+		resetGrid.addActionListener(e -> getView().setGrid(null));
+		grid.add(simpleGrid);
+		grid.add(grid20Px);
+		grid.add(grid50Px);
+		grid.add(resetGrid);
 		
 		return editMenu;
 	}
