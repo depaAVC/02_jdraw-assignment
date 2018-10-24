@@ -135,18 +135,17 @@ public class StdContext extends AbstractContext {
 		editMenu.add(orderMenu);
 
 		JMenu grid = new JMenu("Grid...");
-		grid.add("Grid 1");
-		grid.add("Grid 2");
-		grid.add("Grid 3");
 		editMenu.add(grid);
 		JMenuItem simpleGrid = new JMenuItem("Simple Grid");
-		simpleGrid.addActionListener(e -> getView().setGrid(new SimpleGrid()));
 		JMenuItem grid20Px = new JMenuItem("Grid 20 Px");
-		simpleGrid.addActionListener(e -> getView().setGrid(new Grid20Px()));
 		JMenuItem grid50Px = new JMenuItem("Grid 50 Px");
-		simpleGrid.addActionListener(e -> getView().setGrid(new Grid50Px()));
 		JMenuItem resetGrid = new JMenuItem("Reset Grid");
+
+		simpleGrid.addActionListener(e -> getView().setGrid(new SimpleGrid()));
+		grid20Px.addActionListener(e -> getView().setGrid(new Grid20Px()));
+		grid50Px.addActionListener(e -> getView().setGrid(new Grid50Px()));
 		resetGrid.addActionListener(e -> getView().setGrid(null));
+
 		grid.add(simpleGrid);
 		grid.add(grid20Px);
 		grid.add(grid50Px);
