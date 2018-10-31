@@ -124,9 +124,9 @@ public class StdContext extends AbstractContext {
 				System.out.println(getView().getSelection().size());
 
 				Figure cf = f.clone();
-				clipBoard.add(cf);
+				clipBoard.add(cf);						//saving a prototype.
 				getView().removeFromSelection(f);
-				getView().getModel().removeFigure(f);
+				getView().getModel().removeFigure(f);	//removing from the view. View gets notified (observer pattern).
 
 				System.out.println("Clipboard" + clipBoard.size());
 				System.out.println(getView().getSelection().size());
@@ -140,8 +140,9 @@ public class StdContext extends AbstractContext {
 			clipBoard.clear();
 			List<Figure> originals = getView().getSelection(); //Frage: Variable überhaupt notwendig?
 			for (Figure f : originals) {
-				clipBoard.add(f.clone());
-				System.out.println("f != f.clone()" + (f != f.clone()));
+				clipBoard.add(f.clone()); //saving a prototype.
+
+				System.out.println("\n f != f.clone()" + (f != f.clone()));
 				System.out.println("f != f.clone()" + (f != f.clone()));
 				System.out.println("f.Bounds().x == f.clone().getBounds().x" + (f.getBounds().getX() == f.clone().getBounds().getX()));
 				System.out.println("f.Bounds().y == f.clone().getBounds().y" + (f.getBounds().getY() == f.clone().getBounds().getY()));
@@ -150,11 +151,14 @@ public class StdContext extends AbstractContext {
 		pasteItem.addActionListener(e -> {
 			//bringToFront(getView().getModel(), getView().getSelection());
 			System.out.println("paste");
-			getView().clearSelection();	//allows to paste while other figure is selected.
+			getView().clearSelection();		//allows to paste while other figure is still selected.
 			if (!clipBoard.isEmpty()) {
-				for (Figure f : clipBoard) {
-					Figure cf = f.clone();
+				for (Figure prototypeF : clipBoard) {
+					Figure cf = prototypeF.clone();
 					getView().addToSelection(cf);
+					// draws the cf in the view and registers observer.
+					// Note: not sure if copying references to observers via prototypeF.clone()
+					// overlaps with getModel().addfigure(cf), resulting in duplicate references?
 					getView().getModel().addFigure(cf);
 				}
 			}

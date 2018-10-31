@@ -44,9 +44,12 @@ public abstract class AbstractObservableFigure implements Figure {
 
     public AbstractObservableFigure(AbstractObservableFigure aof) {
         //level 1 deep copy: different lists, but same listeners.
+        System.out.println("Observerlist: before" + observers.size());
+
         for(FigureListener fl : aof.observers) {
             this.observers.add(fl);
         }
+        System.out.println("Observerlist after: " + observers.size());
     }
 
     //required bcs as soon as copy constructor got introduced, there was no implicit
@@ -88,6 +91,7 @@ public abstract class AbstractObservableFigure implements Figure {
     @Override
     public final void addFigureListener(FigureListener listener) {
         if (listener == null) throw new NullPointerException();
+        System.out.println("Observerlist: addFigure" + observers.size());
         observers.add(listener);
     }
 
