@@ -4,7 +4,6 @@
  */
 package jdraw.std;
 
-import java.awt.datatransfer.Clipboard;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -27,9 +26,7 @@ import jdraw.framework.DrawTool;
 import jdraw.framework.DrawToolFactory;
 import jdraw.framework.DrawView;
 import jdraw.framework.Figure;
-import jdraw.grid.Grid20Px;
-import jdraw.grid.Grid50Px;
-import jdraw.grid.SimpleGrid;
+import jdraw.grid.FixedGrid;
 
 /**
  * Standard implementation of interface DrawContext.
@@ -219,17 +216,14 @@ public class StdContext extends AbstractContext {
 
 		JMenu grid = new JMenu("Grid...");
 		editMenu.add(grid);
-		JMenuItem simpleGrid = new JMenuItem("Simple Grid");
 		JMenuItem grid20Px = new JMenuItem("Grid 20 Px");
 		JMenuItem grid50Px = new JMenuItem("Grid 50 Px");
 		JMenuItem resetGrid = new JMenuItem("Reset Grid");
 
-		simpleGrid.addActionListener(e -> getView().setGrid(new SimpleGrid()));
-		grid20Px.addActionListener(e -> getView().setGrid(new Grid20Px()));
-		grid50Px.addActionListener(e -> getView().setGrid(new Grid50Px()));
+		grid20Px.addActionListener(e -> getView().setGrid( new FixedGrid(20,20) ));
+		grid50Px.addActionListener(e -> getView().setGrid( new FixedGrid(50, 50) ));
 		resetGrid.addActionListener(e -> getView().setGrid(null));
 
-		grid.add(simpleGrid);
 		grid.add(grid20Px);
 		grid.add(grid50Px);
 		grid.add(resetGrid);

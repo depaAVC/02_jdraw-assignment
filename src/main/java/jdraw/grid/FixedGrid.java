@@ -7,10 +7,15 @@ import java.awt.*;
 /**
  * Created by degonas on 24.10.2018.
  */
-public class Grid50Px implements DrawGrid {
+public class FixedGrid implements DrawGrid {
 
-    private int stepX = 50;
-    private int stepY = 50;
+    private int stepX;
+    private int stepY;
+
+    public FixedGrid(int stepX, int stepY) {
+        this.stepX = Math.max(1, stepX);
+        this.stepY = Math.max(1, stepY);
+    }
 
     @Override
     public Point constrainPoint(Point p) {
