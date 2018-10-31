@@ -4,7 +4,9 @@
  */
 package jdraw.std;
 
+import java.awt.datatransfer.Clipboard;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,6 +40,13 @@ import jdraw.grid.SimpleGrid;
  */
 @SuppressWarnings("serial")
 public class StdContext extends AbstractContext {
+
+	/**
+	 * stores Figures which are either copied or cut out from the Views.
+	 * Ref: Uebung07.
+	 */
+	private List<Figure> clipBoard = new ArrayList<>();
+
 	/**
 	 * Constructs a standard context with a default set of drawing tools.
 	 * @param view the view that is displaying the actual drawing.
@@ -100,9 +109,59 @@ public class StdContext extends AbstractContext {
 		);
 
 		editMenu.addSeparator();
-		editMenu.add("Cut").setEnabled(false);
-		editMenu.add("Copy").setEnabled(false);
-		editMenu.add("Paste").setEnabled(false);
+		JMenuItem cutItem = new JMenuItem("Cut");
+		JMenuItem copyItem = new JMenuItem("Copy");
+		JMenuItem pasteItem = new JMenuItem("Paste");
+		cutItem.addActionListener(e -> {
+			//bringToFront(getView().getModel(), getView().getSelection());
+			System.out.println("cut");
+			clipBoard.clear();
+			List<Figure> originals = getView().getSelection(); //Frage: Variable überhaupt notwendig?
+			for (Figure f : originals) {
+				System.out.println("------------- Start ------------");
+				System.out.println("Figure: " + f);
+				System.out.println("Clipboard" + clipBoard.size());
+				System.out.println(getView().getSelection().size());
+
+				Figure cf = f.clone();
+				clipBoard.add(cf);
+				getView().removeFromSelection(f);
+				getView().getModel().removeFigure(f);
+
+				System.out.println("Clipboard" + clipBoard.size());
+				System.out.println(getView().getSelection().size());
+				System.out.println("------------- End ------------");
+			}
+			//getView().clearSelection();
+		});
+		copyItem.addActionListener(e -> {
+			//bringToFront(getView().getModel(), getView().getSelection());
+			System.out.println("copy");
+			clipBoard.clear();
+			List<Figure> originals = getView().getSelection(); //Frage: Variable überhaupt notwendig?
+			for (Figure f : originals) {
+				clipBoard.add(f.clone());
+				System.out.println("f != f.clone()" + (f != f.clone()));
+				System.out.println("f != f.clone()" + (f != f.clone()));
+				System.out.println("f.Bounds().x == f.clone().getBounds().x" + (f.getBounds().getX() == f.clone().getBounds().getX()));
+				System.out.println("f.Bounds().y == f.clone().getBounds().y" + (f.getBounds().getY() == f.clone().getBounds().getY()));
+			}
+		});
+		pasteItem.addActionListener(e -> {
+			//bringToFront(getView().getModel(), getView().getSelection());
+			System.out.println("paste");
+			getView().clearSelection();	//allows to paste while other figure is selected.
+			if (!clipBoard.isEmpty()) {
+				for (Figure f : clipBoard) {
+					Figure cf = f.clone();
+					getView().addToSelection(cf);
+					getView().getModel().addFigure(cf);
+				}
+			}
+		});
+		editMenu.add(cutItem);
+		editMenu.add(copyItem);
+		editMenu.add(pasteItem);
 
 		editMenu.addSeparator();
 		JMenuItem clear = new JMenuItem("Clear");

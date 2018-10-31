@@ -27,6 +27,11 @@ public class Line extends AbstractObservableFigure {
         line2D = new Line2D.Double(x1, y1, x2, y2);
     }
 
+    public Line(Line ol) {
+        super(ol);
+        this.line2D = ol.line2D; //evtl ol.line2D.clone();
+    }
+
     /**
      * Draw the line to the given graphics context.
      * @param g the graphics context to use for drawing.
@@ -63,6 +68,11 @@ public class Line extends AbstractObservableFigure {
     @Override
     public Rectangle getBounds() {
         return line2D.getBounds();
+    }
+
+    @Override
+    public Line clone() {
+        return new Line(this);
     }
 
 }

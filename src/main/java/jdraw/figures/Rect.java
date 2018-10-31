@@ -5,6 +5,8 @@
 
 package jdraw.figures;
 
+import jdraw.framework.Figure;
+
 import java.awt.*;
 
 /**
@@ -31,6 +33,11 @@ public class Rect extends AbstractObservableFigure {
 		rectangle = new Rectangle(x, y, w, h);
 	}
 
+
+	public Rect(Rect r) {
+		super(r);
+		this.rectangle = (Rectangle) r.rectangle.clone(); //evtl r.rectangle.clone();
+	}
 	/**
 	 * Draw the rectangle to the given graphics context.
 	 * @param g the graphics context to use for drawing.
@@ -68,4 +75,11 @@ public class Rect extends AbstractObservableFigure {
 		return rectangle.getBounds();
 	}
 
+
+	@Override
+	public Rect clone() {
+		//Gegen Java-Cloning entschieden, da man im Scope der Clone() nicht auf
+		// die privaten Felder des Klones zugreifen kann, um diese zu kopieren.
+		return new Rect(this);
+	}
 }

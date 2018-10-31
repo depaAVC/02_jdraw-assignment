@@ -18,6 +18,9 @@ import java.util.List;
  */
 public interface Figure extends Serializable, Cloneable {
 
+	//Note 'Cloneable': Zudem ist das Interface Figure auch vom Interface Cloneable
+	// abgeleitet, womit angezeigt wird, dass Java-Cloning ver-wendet werden muss.
+
 	/**
 	 * draw is called when the figure has to be drawn.
 	 * 
@@ -105,4 +108,6 @@ public interface Figure extends Serializable, Cloneable {
 	 * @return clone of figure
 	 */
 	Figure clone();
+	//Note: required to override the lone() in Object class.
+	// Note 2: Zeigt an, dass alle Figuren geklont werden können
 }

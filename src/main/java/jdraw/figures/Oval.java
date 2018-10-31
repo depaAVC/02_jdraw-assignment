@@ -39,6 +39,11 @@ public class Oval extends AbstractObservableFigure {
 	 */
 	public Oval(int x, int y, int w, int h) { oval = new Ellipse2D.Double(x, y, w, h); }
 
+	public Oval(Oval o) {
+		super(o);
+		this.oval = o.oval; //evtl o.oval.clone().
+	}
+
 	/**
 	 * Draw the oval to the given graphics context.
 	 * @param g the graphics context to use for drawing.
@@ -84,5 +89,12 @@ public class Oval extends AbstractObservableFigure {
 		handles.add(new EastHandle(this));
 		handles.add(new WestHandle(this));
 		return handles;
+	}
+
+	@Override
+	public Oval clone() {
+		//Gegen Java-Cloning entschieden, da man im Scope der Clone() nicht auf
+		// die privaten Felder des Klones zugreifen kann, um diese zu kopieren.
+		return new Oval(this);
 	}
 }

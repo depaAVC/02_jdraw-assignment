@@ -42,6 +42,18 @@ public abstract class AbstractObservableFigure implements Figure {
      *      ...ist überflüssig.
      * */
 
+    public AbstractObservableFigure(AbstractObservableFigure aof) {
+        //level 1 deep copy: different lists, but same listeners.
+        for(FigureListener fl : aof.observers) {
+            this.observers.add(fl);
+        }
+    }
+
+    //required bcs as soon as copy constructor got introduced, there was no implicit
+    // default constructor left.
+    public AbstractObservableFigure() {
+        //empty bcs all fields are initialized before constructor call.
+    }
 
     /**
      * Returns a list of 8 handles for this Rectangle.
@@ -98,5 +110,18 @@ public abstract class AbstractObservableFigure implements Figure {
     }
 
     @Override
-    public Figure clone() { return null; }
+    public Figure clone() {
+        try {
+            Figure cf = (Figure) super.clone();
+            //deep copy of lvl 1 (clone of observer list)?
+            //List<FigureListener> listeners = new CopyOnWriteArrayList<>(observers);
+            //new AbstractObservableFigure(this) geht wegen abstract nicht.
+            //wie auf private Felder zugreifen?
+            // Fragt sich, ob die clone() in AbstractObservablefigure leer gelassen werden kann oder
+            // eine CloneNotSupportedException wirft.
+            return cf;
+        } catch (CloneNotSupportedException e) {
+            throw new InternalError();
+        }
+    }
 }
