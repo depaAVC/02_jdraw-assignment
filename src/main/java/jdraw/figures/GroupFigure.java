@@ -22,6 +22,12 @@ public class GroupFigure extends AbstractObservableFigure implements FigureGroup
         }
     }
 
+    public GroupFigure(GroupFigure gf) {
+        for(Figure f : gf.getFigureParts()){
+            parts.add(f.clone());   //deep copy
+        }
+    }
+
     private void add(Figure f) {
         //Todo: parent attribute in all figures
         parts.add(f);
@@ -69,7 +75,7 @@ public class GroupFigure extends AbstractObservableFigure implements FigureGroup
 
     @Override
     public Figure clone() {
-        return null;
+        return new GroupFigure(this);
     }
 
     @Override

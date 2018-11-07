@@ -41,7 +41,7 @@ public class Oval extends AbstractObservableFigure {
 
 	public Oval(Oval o) {
 		super(o);
-		this.oval = o.oval; //evtl o.oval.clone().
+		this.oval = (Ellipse2D) o.oval.clone(); //evtl o.oval.clone(). Ja, muss. sonst wird kein zweites Oval in der View angezeigt.
 	}
 
 	/**

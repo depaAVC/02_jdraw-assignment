@@ -120,7 +120,7 @@ public class StdContext extends AbstractContext {
 				System.out.println("Clipboard" + clipBoard.size());
 				System.out.println(getView().getSelection().size());
 
-				Figure cf = f.clone();
+				Figure cf = f/*.clone()*/;	//cloning not necessary bcs f gets removed from model anyway.
 				clipBoard.add(cf);						//saving a prototype.
 				getView().removeFromSelection(f);
 				getView().getModel().removeFigure(f);	//removing from the view. View gets notified (observer pattern).

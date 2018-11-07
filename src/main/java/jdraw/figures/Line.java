@@ -29,7 +29,7 @@ public class Line extends AbstractObservableFigure {
 
     public Line(Line ol) {
         super(ol);
-        this.line2D = ol.line2D; //evtl ol.line2D.clone();
+        this.line2D = (Line2D) ol.line2D.clone(); //evtl ol.line2D.clone();Ja, muss. sonst wird kein zweites Oval in der View angezeigt.
     }
 
     /**
