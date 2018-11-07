@@ -175,10 +175,10 @@ public class StdContext extends AbstractContext {
 		JMenuItem group = new JMenuItem("Group");
 		group.addActionListener(e -> {
 			List<Figure> selection = getView().getSelection();
-			getModel().addFigure(new GroupFigure(selection));
 			for(Figure f : selection) {
 				getModel().removeFigure(f);
 			}
+			getModel().addFigure(new GroupFigure(selection));
 		});
 		getView().getSelection();
 		editMenu.add(group);

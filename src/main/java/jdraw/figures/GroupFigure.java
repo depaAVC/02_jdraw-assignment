@@ -12,10 +12,9 @@ import java.util.List;
 /**
  * Created by degonas on 25.10.2018.
  */
-public class GroupFigure implements Figure, FigureGroup {
+public class GroupFigure extends AbstractObservableFigure implements FigureGroup {
 
-    private List<Figure> parts = new LinkedList<>();
-    private Rectangle rect = new Rectangle();
+    private final List<Figure> parts = new LinkedList<>();
 
     public GroupFigure(List<Figure> figures) {
         for(Figure f : figures) {
@@ -40,11 +39,12 @@ public class GroupFigure implements Figure, FigureGroup {
         for (Figure f : parts) {
             f.move(dx, dy);
         }
+        notifyFigureObservers();
     }
 
     @Override
     public boolean contains(int x, int y) {
-        return rect.contains(x, y);
+        return getBounds().contains(x, y);
     }
 
     @Override
@@ -54,26 +54,18 @@ public class GroupFigure implements Figure, FigureGroup {
 
     @Override
     public Rectangle getBounds() {
-        for (Figure f : parts) {
-            rect.add(f.getBounds());
+        Rectangle rect = parts.get(0).getBounds();
+        for (int i = 1; i < parts.size(); i++) {
+            rect.add(parts.get(i).getBounds());
         }
         return rect;
     }
 
-    @Override
-    public List<FigureHandle> getHandles() {
-        return null;
-    }
 
-    @Override
-    public void addFigureListener(FigureListener listener) {
-        //todo: inherit from AbstractObservableFigure?
-    }
+    // Needs to be commented out, lol. That's why handles didn't show up. ^^"
+   // public List<FigureHandle> getHandles() {        return null;    }
 
-    @Override
-    public void removeFigureListener(FigureListener listener) {
-
-    }
+    //add/removeFigureListener von AsbtractObservableFigure geerbt.
 
     @Override
     public Figure clone() {
@@ -82,6 +74,9 @@ public class GroupFigure implements Figure, FigureGroup {
 
     @Override
     public Iterable<Figure> getFigureParts() {
-        return parts;
+        //unmodifiableList ONLY allows query acces (get, indexOf...)
+        // but prohibits modificational access (set, add, remove) from outside.
+        // In otherwords. This group figure will be protected against modifications from outside.
+        return Collections.unmodifiableList(parts);
     }
 }
