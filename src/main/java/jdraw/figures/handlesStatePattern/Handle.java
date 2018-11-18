@@ -6,28 +6,31 @@ import jdraw.framework.FigureHandle;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.io.Serializable;
 
 /**
  * Created by degonas on 21.10.2018.
  */
 public class Handle implements FigureHandle {
 
-    static interface State {
+    public static interface State {
         //default State handleGetOwner() {}
         default void handleLocation(HandleData data, Figure owner) {}
         default void handleCursor(HandleData data) {}
         default void handleOppositeCorner(HandleData data, int x, int y, Rectangle r) {}
-        default State handleDragInteraction(HandleData data, Figure owner, int x, int y) {return ERROR; }
+        default State handleDragInteraction(HandleData data, Figure owner, int x, int y) {return ERROR;  }
     }
 
     static abstract class AbstractDiagonalState implements State {
         @Override
         public State handleDragInteraction(HandleData data, Figure owner, int x, int y) {
+            Rectangle r = owner.getBounds();
             owner.setBounds(new Point(x, y), data.corner);
-            if (x < data.corner.x && y < data.corner.y) return NW;
-            if (x < data.corner.x && y > data.corner.y) return SW;
-            if (x > data.corner.x && y < data.corner.y) return NE;
-            //if (x > data.corner.x && y > data.corner.y) return SE;
+
+            if (x < data.corner.x && y < data.corner.y)  return NW;
+            if (x < data.corner.x && y > data.corner.y) return SW; //owner.swapHandlesVertically();  //return SW;
+            if (x > data.corner.x && y < data.corner.y) return NE; //owner.swapHandlesHorizontal(); //return NE;
+            if (x > data.corner.x && y > data.corner.y) return SE; //owner.swapHandlesVertically(); //return SE;
             else return SE;
         }
     }
@@ -157,6 +160,15 @@ public class Handle implements FigureHandle {
         this.fill = fill;
     }
 
+    //Figure can change state of this handle at run-time.
+    public void setState(State state) {
+        this.state = state;
+    }
+    // required to swapHorizontally or Vertically from Figure at run-time.
+    public State getState() {
+        return state;
+    }
+
     @Override
     public Figure getOwner() {
         return owner;
@@ -192,7 +204,7 @@ public class Handle implements FigureHandle {
     @Override
     public void startInteraction(int x, int y, MouseEvent e, DrawView v) {
         Rectangle r = owner.getBounds();
-        state.handleOppositeCorner(data, x, y, r);
+        state.handleOppositeCorner(data, x, y, r);  //dragInteraction delegated to state object.
         //data.corner = getOppositeCorner(x, y, r);
     }
 

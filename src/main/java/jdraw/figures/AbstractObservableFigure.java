@@ -8,6 +8,7 @@ import jdraw.framework.FigureHandle;
 import jdraw.framework.FigureListener;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -42,6 +43,15 @@ public abstract class AbstractObservableFigure implements Figure {
      *      ...ist überflüssig.
      * */
 
+    private final Handle NW = new Handle(this, Handle.NW, Color.BLUE);
+    private final Handle SW = new Handle(this, Handle.SW, Color.ORANGE);
+    private final Handle NE = new Handle(this, Handle.NE, Color.RED);
+    private final Handle SE = new Handle(this, Handle.SE);
+    private final Handle E = new Handle(this, Handle.E);
+    private final Handle W = new Handle(this, Handle.W);
+    private final Handle N = new Handle(this, Handle.N);
+    private final Handle S = new Handle(this, Handle.S);
+
     public AbstractObservableFigure(AbstractObservableFigure aof) {
         //level 1 deep copy: different lists, but same listeners.
         System.out.println("Observerlist: before" + observers.size());
@@ -68,12 +78,35 @@ public abstract class AbstractObservableFigure implements Figure {
         List<FigureHandle> handles = new LinkedList<>();
         //addHandlesOfInheritanceApproach(handles);
 
-        handles.add(new Handle(this, Handle.NW, Color.BLUE));
-        handles.add(new Handle(this, Handle.SW, Color.ORANGE));
-        handles.add(new Handle(this, Handle.NE, Color.RED));
-        handles.add(new Handle(this, Handle.SE));
+        handles.add(NW);    //NW = a predefined handle / an attribute of this figure
+        handles.add(SW);
+        handles.add(NE);
+        handles.add(SE);
+        /*handles.add(E);   //not implemented Handle.states
+        handles.add(W);
+        handles.add(N);
+        handles.add(S);*/
 
         return handles;
+    }
+
+    public void swapHandlesHorizontal() {
+        Handle.State NWstate = NW.getState();
+        Handle.State NEstate = NE.getState();
+        Handle.State SWstate = SW.getState();
+        Handle.State SEstate = SE.getState();
+        Handle.State WState = W.getState();
+        Handle.State EState = E.getState();
+        NW.setState(NEstate);
+        NE.setState(NWstate);
+        SW.setState(SEstate);
+        SE.setState(SWstate);
+        W.setState(EState);
+        E.setState(WState);
+    }
+
+    public void swapHandlesVertically() {
+
     }
 
 

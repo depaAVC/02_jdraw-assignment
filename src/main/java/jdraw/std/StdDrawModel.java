@@ -24,7 +24,6 @@ public class StdDrawModel implements DrawModel, FigureListener{
 	private final ArrayList<Figure> allFigures = new ArrayList<>();
     private final List<DrawModelListener> observers = new CopyOnWriteArrayList<>();
 
-
     private void notifyModelObservers(Figure f, DrawModelEvent.Type type) {
 		DrawModelEvent e = new DrawModelEvent(this, f, type);
         for(DrawModelListener obs : observers){

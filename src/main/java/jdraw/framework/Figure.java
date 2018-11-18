@@ -110,4 +110,9 @@ public interface Figure extends Serializable, Cloneable {
 	Figure clone();
 	//Note: required to override the lone() in Object class.
 	// Note 2: Zeigt an, dass alle Figuren geklont werden können
+
+
+	//------------ added manually for state pattern in handle.------------
+	public void swapHandlesHorizontal();
+	public void swapHandlesVertically();
 }

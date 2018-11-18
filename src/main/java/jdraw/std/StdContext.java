@@ -4,7 +4,7 @@
  */
 package jdraw.std;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -330,6 +330,26 @@ public class StdContext extends AbstractContext {
 			FileFilter filter = chooser.getFileFilter();
 			if(filter instanceof FileNameExtensionFilter && !filter.accept(file)) {
 				file = new File(chooser.getCurrentDirectory(), file.getName() + "." + ((FileNameExtensionFilter)filter).getExtensions()[0]);
+
+				//How to Outputstream: https://www.tutorialspoint.com/java/io/objectoutputstream_writeobject.htm
+				try {
+					FileOutputStream fos = new FileOutputStream(file);
+					ObjectOutputStream oos = new ObjectOutputStream(fos);
+
+					Iterable<Figure> allFigures = getModel().getFigures();
+					//required info for ObjectInputStream
+					int streamLength = ((List<Figure>) allFigures).size();
+					oos.writeInt(streamLength);
+					for(Figure f : allFigures) {
+						oos.writeObject(f.clone());
+					}
+					oos.close();
+					fos.close();
+				} catch (FileNotFoundException ffe) {
+					System.out.println(ffe.getStackTrace());
+				} catch (IOException ioe) {
+					System.out.println(ioe.getStackTrace());
+				}
 			}
 			System.out.println("save current graphic to file " + file.getName() + " using format "
 					+ ((FileNameExtensionFilter)filter).getExtensions()[0]);
@@ -361,6 +381,26 @@ public class StdContext extends AbstractContext {
 			// read jdraw graphic
 			System.out.println("read file "
 					+ chooser.getSelectedFile().getName());
+
+			//How to Inputstream: https://www.tutorialspoint.com/java/io/objectoutputstream_writeobject.htm
+			try {
+				FileInputStream fis = new FileInputStream( chooser.getSelectedFile().getAbsolutePath() );
+				ObjectInputStream ois = new ObjectInputStream(fis);
+
+				int streamLength = ois.readInt();
+				for(int i = 0; i < streamLength; i++ ) {
+					getModel().addFigure( (Figure) ois.readObject() );
+				}
+
+				ois.close();
+				fis.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
