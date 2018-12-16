@@ -1,8 +1,8 @@
 package jdraw.figures.handlesStatePattern;
 
-import jdraw.framework.DrawView;
-import jdraw.framework.Figure;
-import jdraw.framework.FigureHandle;
+import com.sun.org.apache.xalan.internal.xsltc.cmdline.getopt.GetOpt;
+import jdraw.framework.*;
+import jdraw.framework.Commands.SetBoundsCommand;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -102,19 +102,19 @@ public class Handle implements FigureHandle {
     }
 
     static class N implements State {
-
+        //Todo
     }
 
     static class S implements State {
-
+        //Todo
     }
 
     static class E implements State {
-
+        //Todo
     }
 
     static class W implements State {
-
+        //Todo
     }
 
     static class ErrorState implements State {}
@@ -203,18 +203,40 @@ public class Handle implements FigureHandle {
 
     @Override
     public void startInteraction(int x, int y, MouseEvent e, DrawView v) {
+        DrawCommandHandler dch = v.getModel().getDrawCommandHandler();
+        dch.beginScript();
+        Figure f = getOwner();
+        Rectangle prevBounds = f.getBounds();
+
         Rectangle r = owner.getBounds();
         state.handleOppositeCorner(data, x, y, r);  //dragInteraction delegated to state object.
         //data.corner = getOppositeCorner(x, y, r);
+
+        Rectangle newBounds = f.getBounds();
+        dch.addCommand(new SetBoundsCommand(f, prevBounds, newBounds));
     }
 
     @Override
     public void dragInteraction(int x, int y, MouseEvent e, DrawView v) {
+        Figure f = getOwner();
+        Rectangle prevBounds = f.getBounds();
+
         state = state.handleDragInteraction(data, owner, x ,y);
+
+        Rectangle newBounds = f.getBounds();
+        DrawCommandHandler dch = v.getModel().getDrawCommandHandler();
+        dch.addCommand(new SetBoundsCommand(f, prevBounds, newBounds));
+
     }
 
     @Override
     public void stopInteraction(int x, int y, MouseEvent e, DrawView v) {
+        DrawCommandHandler dch = v.getModel().getDrawCommandHandler();
+        Figure f = getOwner();
+        Rectangle prevBounds = f.getBounds();
+        Rectangle newBounds = f.getBounds();
+        dch.addCommand(new SetBoundsCommand(f, prevBounds, newBounds));
+        dch.endScript();
         data.corner = null;
     }
 
