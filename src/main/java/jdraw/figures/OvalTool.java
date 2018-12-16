@@ -34,6 +34,8 @@ public class OvalTool extends AbstractDrawTool {
 	// a factory method, using inheritance.
 	@Override
 	public Figure getNewFigure(int x, int y) {
-		return new Oval(x, y, 0, 0);
+		Oval o = new Oval(x, y, 0, 0);
+		registerAddCommand(o);
+		return o;
 	}
 }

@@ -25,6 +25,8 @@ public class LineTool extends AbstractDrawTool {
     // a factory method, using inheritance.
     @Override
     public Figure getNewFigure(int x, int y) {
-        return new Line(x, y, x, y);
+        Line line = new Line(x, y, x, y);
+        registerAddCommand(line);
+        return line;
     }
 }

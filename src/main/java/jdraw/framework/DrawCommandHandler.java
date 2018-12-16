@@ -16,7 +16,7 @@ package jdraw.framework;
  * @version 2.5
  */
 
-public interface DrawCommandHandler {
+public interface  DrawCommandHandler {
 
 	/**
 	 * Adds a new command to the command list at the current position. The

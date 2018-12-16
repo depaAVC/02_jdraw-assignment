@@ -1,5 +1,6 @@
 package jdraw.figures;
 
+import jdraw.framework.Commands.AddFigureCommand;
 import jdraw.framework.DrawContext;
 import jdraw.framework.DrawTool;
 import jdraw.framework.DrawView;
@@ -154,4 +155,7 @@ public abstract class AbstractDrawTool implements DrawTool {
     public abstract Figure getNewFigure(int x, int y);
 
 
+    void registerAddCommand(Figure f){
+        view.getModel().getDrawCommandHandler().addCommand(new AddFigureCommand(view.getModel(), f));
+    }
 }

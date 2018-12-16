@@ -67,8 +67,8 @@ public class StdDrawModel implements DrawModel, FigureListener{
 	}
 
 	/** The draw command handler. Initialized here with a dummy implementation. */
-	// TODO initialize with your implementation of the undo/redo-assignment.
-	private DrawCommandHandler handler = new EmptyDrawCommandHandler();
+	// Done initialize with your implementation of the undo/redo-assignment.
+	private DrawCommandHandler handler = new StdDrawCommandHandler();
 
 	/**
 	 * Retrieve the draw command handler in use.

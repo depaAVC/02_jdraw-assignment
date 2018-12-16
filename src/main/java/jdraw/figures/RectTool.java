@@ -38,6 +38,8 @@ public class RectTool extends AbstractDrawTool {
 	// a factory method, using inheritance.
     @Override
     public Figure getNewFigure(int x, int y) {
-        return new Rect(x, y, 0, 0);
+        Rect r =  new Rect(x, y, 0, 0);
+        registerAddCommand(r);
+        return r;
     }
 }
