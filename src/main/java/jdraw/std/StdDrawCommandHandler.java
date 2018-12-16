@@ -1,5 +1,6 @@
 package jdraw.std;
 
+import jdraw.framework.Commands.GroupCommand;
 import jdraw.framework.DrawCommand;
 import jdraw.framework.DrawCommandHandler;
 
@@ -13,9 +14,16 @@ public class StdDrawCommandHandler implements DrawCommandHandler {
     private Stack<DrawCommand> past = new Stack<>();
     private Stack<DrawCommand> future = new Stack<>();
 
+    private boolean hasToRecordMacroCommand = false;
+    private GroupCommand currentGroupCommand = null;
+
     @Override
     public void addCommand(DrawCommand cmd) {
-        past.add(cmd);
+        if (hasToRecordMacroCommand){
+            currentGroupCommand.add(cmd);
+        } else {
+            past.add(cmd);
+        }
         future.clear();
     }
 
@@ -53,17 +61,21 @@ public class StdDrawCommandHandler implements DrawCommandHandler {
 
     @Override
     public void beginScript() {
-
+        hasToRecordMacroCommand = true;
+        currentGroupCommand = new GroupCommand();
+        past.add( currentGroupCommand);
     }
 
     @Override
     public void endScript() {
-
+        hasToRecordMacroCommand = false;
+        currentGroupCommand = null;
     }
 
     @Override
     public void clearHistory() {
         past.clear();
         future.clear();
+        endScript();
     }
 }
