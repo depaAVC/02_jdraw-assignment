@@ -5,6 +5,7 @@
 
 package jdraw.figures;
 
+import jdraw.figures.handlesStatePattern.AbstractRectengularFigure;
 import jdraw.framework.Figure;
 
 import java.awt.*;
@@ -15,7 +16,7 @@ import java.awt.*;
  * @author Christoph Denzler
  *
  */
-public class Rect extends AbstractObservableFigure {
+public class Rect extends AbstractRectengularFigure {
 
 	/**
 	 * Use the java.awt.Rectangle in order to save/reuse code.

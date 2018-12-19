@@ -5,17 +5,17 @@
 
 package jdraw.figures;
 
-import jdraw.figures.handles.*;
-import jdraw.framework.Figure;
-import jdraw.framework.FigureEvent;
+import jdraw.figures.handles.EastHandle;
+import jdraw.figures.handles.NorthHandle;
+import jdraw.figures.handles.SouthHandle;
+import jdraw.figures.handles.WestHandle;
+import jdraw.figures.handlesStatePattern.AbstractRectengularFigure;
 import jdraw.framework.FigureHandle;
-import jdraw.framework.FigureListener;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Represents ovals in JDraw.
@@ -23,7 +23,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Christoph Denzler
  *
  */
-public class Oval extends AbstractObservableFigure {
+public class Oval extends AbstractRectengularFigure {
 
 	/**
 	 * Use the java.awt..geom.Oval in order to save/reuse code.

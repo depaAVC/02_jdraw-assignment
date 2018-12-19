@@ -16,10 +16,11 @@ import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import jdraw.figures.GroupFigure;
-import jdraw.figures.LineTool;
-import jdraw.figures.OvalTool;
-import jdraw.figures.RectTool;
+import jdraw.figures.*;
+import jdraw.figures.decorators.AbstractDecorator;
+import jdraw.figures.decorators.BorderDecorator;
+import jdraw.figures.decorators.GreenFigure;
+import jdraw.figures.handlesStatePattern.AbstractRectengularFigure;
 import jdraw.framework.DrawCommandHandler;
 import jdraw.framework.DrawModel;
 import jdraw.framework.DrawTool;
@@ -170,7 +171,51 @@ public class StdContext extends AbstractContext {
 		clear.addActionListener(e -> {
 			getModel().removeAllFigures();
 		});
-		
+
+		//-----------------Decorator selection---------------------
+		editMenu.addSeparator();
+		JMenu decorators = new JMenu("Decorators...");
+
+		JMenuItem borderDecorator = new JMenuItem("3D Border");
+		borderDecorator.addActionListener(e -> {
+			List<Figure> selection = getView().getSelection();
+			for (Figure f : selection) {
+				if (f instanceof AbstractRectengularFigure){
+					getModel().removeFigure(f);
+					getModel().addFigure( new BorderDecorator(f));
+				}
+			}
+		});
+
+		JMenuItem greenDecorator = new JMenuItem("Green fill");
+		greenDecorator.addActionListener(e -> {
+			List<Figure> selection = getView().getSelection();
+			for (Figure f : selection) {
+				if (f instanceof AbstractRectengularFigure){
+					getModel().removeFigure(f);
+					getModel().addFigure( new GreenFigure(f));
+				}
+			}
+		});
+
+		JMenuItem removePreviousDecorator = new JMenuItem("Remove Decoration");
+		removePreviousDecorator.addActionListener(e -> {
+			List<Figure> selection = getView().getSelection();
+			for (Figure f : selection) {
+				if (f instanceof AbstractDecorator){
+					getModel().removeFigure(f);
+					getModel().addFigure( ((AbstractDecorator) f).getInner() );
+				}
+			}
+		});
+		decorators.add(borderDecorator);
+		decorators.add(greenDecorator);
+		decorators.addSeparator();
+		decorators.add(removePreviousDecorator);
+		editMenu.add(decorators);
+
+		//---------end decorators--------------------
+
 		editMenu.addSeparator();
 		JMenuItem group = new JMenuItem("Group");
 		group.addActionListener(e -> {

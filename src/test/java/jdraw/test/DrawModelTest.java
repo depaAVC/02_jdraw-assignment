@@ -33,6 +33,16 @@ public class DrawModelTest {
 		@Override public void addFigureListener(FigureListener listener) { }
 		@Override public void removeFigureListener(FigureListener listener) { }
 		@Override public Figure clone() { return null;}
+
+		@Override
+		public void swapHandlesHorizontal() {
+
+		}
+
+		@Override
+		public void swapHandlesVertically() {
+
+		}
 	}
 
 	private DrawModel m;
