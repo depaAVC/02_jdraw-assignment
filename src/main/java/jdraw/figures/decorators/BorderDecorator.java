@@ -1,6 +1,5 @@
 package jdraw.figures.decorators;
 
-import jdraw.figures.Rect;
 import jdraw.framework.Figure;
 
 import java.awt.*;
@@ -10,21 +9,31 @@ import java.awt.*;
  */
 public class BorderDecorator extends AbstractDecorator {
 
+    private static final int BORDER_OFFSET = 5;
+
     public BorderDecorator(Figure innerFig){
         super(innerFig);
     }
 
 
     @Override
+    public Rectangle getBounds() {
+        Rectangle r = getInner().getBounds();
+        r.grow(BORDER_OFFSET, BORDER_OFFSET);
+        return r;
+    }
+
+    @Override
     public void draw(Graphics g) {
         getInner().draw(g);
-        Rectangle b = getInner().getBounds();
+        Rectangle b = getBounds();  //from BorderDecorator
 
         //XXX: symbolic implementation
-        g.draw3DRect(b.x - (b.width / 10), b.y, b.width / 10, b.height, true);
-        g.draw3DRect(b.x + b.width, b.y, b.width / 10, b.height, true);
-        g.draw3DRect(b.x, b.y - (b.height / 10), b.width, b.height / 10, true);
-        g.draw3DRect(b.x, b.y + + b.height, b.width, b.height / 10, true);
-        //todo: How to draw border in AWT according to screenshot in pdf?
+        g.setColor(Color.white);
+        g.drawLine(b.x, b.y, b.x, b.y + b.height);
+        g.drawLine(b.x, b.y, b.x + b.width, b.y);
+        g.setColor(Color.gray);
+        g.drawLine(b.x + b.width, b.y, b.x + b.width, b.y + b.height);
+        g.drawLine(b.x, b.y + b.height, b.x + b.width, b.y + b.height);
     }
 }
