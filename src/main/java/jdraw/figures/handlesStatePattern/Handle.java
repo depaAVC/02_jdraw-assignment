@@ -204,7 +204,7 @@ public class Handle implements FigureHandle {
     @Override
     public void startInteraction(int x, int y, MouseEvent e, DrawView v) {
         DrawCommandHandler dch = v.getModel().getDrawCommandHandler();
-        dch.beginScript();
+        //dch.beginScript(); //wird vom JDraw bereits aufgerufen
         Figure f = getOwner();
         Rectangle prevBounds = f.getBounds();
 
@@ -236,7 +236,7 @@ public class Handle implements FigureHandle {
         Rectangle prevBounds = f.getBounds();
         Rectangle newBounds = f.getBounds();
         dch.addCommand(new SetBoundsCommand(f, prevBounds, newBounds));
-        dch.endScript();
+        //dch.endScript(); //wird vom JDraw bereits aufgerufen
         data.corner = null;
     }
 

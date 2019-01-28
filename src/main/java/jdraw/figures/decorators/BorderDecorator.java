@@ -28,7 +28,6 @@ public class BorderDecorator extends AbstractDecorator {
         getInner().draw(g);
         Rectangle b = getBounds();  //from BorderDecorator
 
-        //XXX: symbolic implementation
         g.setColor(Color.white);
         g.drawLine(b.x, b.y, b.x, b.y + b.height);
         g.drawLine(b.x, b.y, b.x + b.width, b.y);

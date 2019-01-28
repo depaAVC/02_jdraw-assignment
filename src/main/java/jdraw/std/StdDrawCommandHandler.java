@@ -63,12 +63,15 @@ public class StdDrawCommandHandler implements DrawCommandHandler {
     public void beginScript() {
         hasToRecordMacroCommand = true;
         currentGroupCommand = new GroupCommand();
-        past.add( currentGroupCommand);
     }
 
     @Override
     public void endScript() {
         hasToRecordMacroCommand = false;
+        //prevents empty commands.
+        if (!currentGroupCommand.isEmpty()) {
+            past.add( currentGroupCommand);
+        }
         currentGroupCommand = null;
     }
 

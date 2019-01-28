@@ -19,6 +19,7 @@ public class GroupCommand implements DrawCommand {
 
     @Override
     public void redo() {
+        //from first command to last command
         for (DrawCommand dc : parts) {
             dc.redo();
         }
@@ -32,8 +33,9 @@ public class GroupCommand implements DrawCommand {
 
     @Override
     public void undo() {
-        for (DrawCommand dc : parts) {
-            dc.undo();
+        //from last command to first command
+        for (int i = parts.size() - 1; i >= 0; i--) {
+            parts.get(i).undo();
         }
 
         //"Do first / last command" - strategy:
@@ -49,5 +51,9 @@ public class GroupCommand implements DrawCommand {
 
     private DrawCommand getLastCommand() {
         return parts.get( parts.size() - 1);
+    }
+
+    public boolean isEmpty(){
+        return parts.isEmpty();
     }
 }

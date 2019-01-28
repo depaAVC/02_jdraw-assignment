@@ -126,6 +126,10 @@ public class StdContext extends AbstractContext {
 				getView().removeFromSelection(f);
 				getView().getModel().removeFigure(f);	//removing from the view. View gets notified (observer pattern).
 
+				//undo/redo
+				//getModel().getDrawCommandHandler().addCommand(new RemoveFigureCommand(getModel(), cf));
+
+
 				System.out.println("Clipboard" + clipBoard.size());
 				System.out.println(getView().getSelection().size());
 				System.out.println("------------- End ------------");

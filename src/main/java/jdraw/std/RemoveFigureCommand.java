@@ -16,8 +16,9 @@ import jdraw.framework.Figure;
  * 
  */
 public class RemoveFigureCommand implements DrawCommand {
-	/** The model from which to remove the figure. */
+	/**  Receiver: The model from which to remove the figure. */
 	private final DrawModel model;
+	//required information to execute methods on receiver (parameters).
 	/** The figure to remove. */
 	private final Figure figure;
 	/** index of the figure in the model. */
